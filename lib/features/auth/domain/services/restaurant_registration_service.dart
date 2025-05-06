@@ -19,7 +19,7 @@ class RestaurantRegistrationService implements RestaurantRegistrationServiceInte
     XFile? pickLogo = await ImagePicker().pickImage(source: ImageSource.gallery);
     if(pickLogo != null) {
       await pickLogo.length().then((value) {
-        if(value > 2000000) {
+        if(value > 5000000) {
           pLogo = null;
           showCustomSnackBar('please_upload_lower_size_file'.tr);
         }else {
@@ -58,7 +58,7 @@ class RestaurantRegistrationService implements RestaurantRegistrationServiceInte
       );
     }
     if(result != null && result.files.isNotEmpty) {
-      if(result.files.single.size > 2000000) {
+      if(result.files.single.size > 5000000) {
         result = null;
         showCustomSnackBar('please_upload_lower_size_file'.tr);
       } else {
