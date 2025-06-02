@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_asset_image_widget.dart';
 import 'package:zaika/common/widgets/custom_text_field_widget.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
@@ -98,6 +99,7 @@ class _SelectLocationViewWidgetState extends State<SelectLocationViewWidget> {
 
               widget.fromView && !isDesktop ? CustomTextFieldWidget(
                 titleText: 'write_restaurant_address'.tr,
+                errorText: ApiChecker.errors['address'],
                 controller: widget.addressController,
                 focusNode: widget.addressFocus,
                 inputAction: TextInputAction.done,

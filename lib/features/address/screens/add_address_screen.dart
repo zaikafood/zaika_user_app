@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_button_widget.dart';
 import 'package:zaika/common/widgets/custom_text_field_widget.dart';
 import 'package:zaika/common/widgets/footer_view_widget.dart';
@@ -395,6 +396,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         
         CustomTextFieldWidget(
           hintText: 'delivery_address'.tr,
+          errorText: ApiChecker.errors['address'],
           labelText: 'delivery_address'.tr,
           required: true,
           inputType: TextInputType.streetAddress,
@@ -423,6 +425,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         CustomTextFieldWidget(
           hintText: 'ex_doe'.tr,
           labelText: 'name'.tr,
+          errorText: ApiChecker.errors['contact_person_name'],
           required: true,
           inputType: TextInputType.name,
           controller: _contactPersonNameController,
@@ -436,6 +439,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         CustomTextFieldWidget(
           hintText: 'xxx-xxx-xxxxx',
           labelText: 'phone'.tr,
+          errorText: ApiChecker.errors['contact_person_number'],
           required: true,
           controller: _contactPersonNumberController,
           focusNode: _numberNode,
@@ -452,6 +456,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         widget.forGuest ? CustomTextFieldWidget(
           hintText: 'enter_email'.tr,
           labelText: 'email'.tr,
+          errorText: ApiChecker.errors['contact_person_email'],
           controller: _emailController,
           focusNode: _emailFocus,
           nextFocus: _streetNode,
@@ -462,6 +467,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         CustomTextFieldWidget(
           hintText: "ex_02".tr,
           labelText: 'street_number'.tr,
+          errorText: ApiChecker.errors['road'],
           inputType: TextInputType.streetAddress,
           focusNode: _streetNode,
           nextFocus: _houseNode,
@@ -474,6 +480,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             child: CustomTextFieldWidget(
               hintText: 'ex_1005/2'.tr,
               labelText: 'house'.tr,
+              errorText: ApiChecker.errors['house'],
               inputType: TextInputType.text,
               focusNode: _houseNode,
               nextFocus: _floorNode,
@@ -485,6 +492,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
           Expanded(
             child: CustomTextFieldWidget(
               hintText: 'ex_02'.tr,
+              errorText: ApiChecker.errors['floor'],
               labelText: 'floor'.tr,
               inputType: TextInputType.text,
               focusNode: _floorNode,

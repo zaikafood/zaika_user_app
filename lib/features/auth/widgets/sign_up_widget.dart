@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/models/response_model.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
 import 'package:zaika/features/auth/domain/centralize_login_enum.dart';
@@ -100,6 +101,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                       child: CustomTextFieldWidget(
                         hintText: 'ex_jhon'.tr,
                         labelText: 'user_name'.tr,
+                        errorText: ApiChecker.errors['name'],
                         showLabelText: true,
                         required: true,
                         controller: _nameController,
@@ -153,6 +155,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                       child: CustomTextFieldWidget(
                         hintText: 'xxx-xxx-xxxxx'.tr,
                         labelText: 'phone'.tr,
+                        errorText: ApiChecker.errors['phone'],
                         showLabelText: true,
                         required: true,
                         controller: _phoneController,
@@ -175,6 +178,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
 
                   !isDesktop ? CustomTextFieldWidget(
                     labelText: 'email'.tr,
+                    errorText: ApiChecker.errors['email'],
                     hintText: 'enter_email'.tr,
                     showLabelText: true,
                     required: true,
@@ -194,6 +198,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                         CustomTextFieldWidget(
                           hintText: '8+characters'.tr,
                           labelText: 'password'.tr,
+                          errorText: ApiChecker.errors['password'],
                           showLabelText: true,
                           required: true,
                           controller: _passwordController,
@@ -229,6 +234,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
 
                   !isDesktop ? CustomTextFieldWidget(
                     hintText: '8+characters'.tr,
+                    errorText: ApiChecker.errors['confirm_password'],
                     labelText: 'confirm_password'.tr,
                     showLabelText: true,
                     required: true,
@@ -247,6 +253,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
 
                   (Get.find<SplashController>().configModel!.refEarningStatus == 1 && !isDesktop) ? CustomTextFieldWidget(
                     hintText: 'refer_code'.tr,
+                    errorText: ApiChecker.errors['ref_code'],
                     labelText: 'refer_code'.tr,
                     showLabelText: true,
                     controller: _referCodeController,

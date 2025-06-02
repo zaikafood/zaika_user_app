@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_button_widget.dart';
 import 'package:zaika/common/widgets/custom_ink_well_widget.dart';
 import 'package:zaika/common/widgets/custom_text_field_widget.dart';
@@ -53,6 +54,7 @@ class ManualLoginWidget extends StatelessWidget {
               focusNode: phoneFocus,
               nextFocus: passwordFocus,
               inputType: TextInputType.emailAddress,
+              errorText: ApiChecker.errors['email_or_phone'],
               prefixIcon: authController.isNumberLogin ? null : Icons.email,
               // prefixImage: authController.isNumberLogin ? null : Images.emailOrPhone,
               onChanged: (String text){
@@ -84,6 +86,7 @@ class ManualLoginWidget extends StatelessWidget {
 
             CustomTextFieldWidget(
               hintText: '8_character'.tr,
+              errorText: ApiChecker.errors['password'],
               controller: passwordController,
               focusNode: passwordFocus,
               inputAction: TextInputAction.done,

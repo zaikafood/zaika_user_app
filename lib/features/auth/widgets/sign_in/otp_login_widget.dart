@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_button_widget.dart';
 import 'package:zaika/common/widgets/custom_text_field_widget.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
@@ -36,6 +37,7 @@ class OtpLoginWidget extends StatelessWidget {
 
             CustomTextFieldWidget(
               hintText: 'xxx-xxx-xxxxx'.tr,
+              errorText: ApiChecker.errors['phone'],
               controller: phoneController,
               focusNode: phoneFocus,
               inputAction: TextInputAction.done,

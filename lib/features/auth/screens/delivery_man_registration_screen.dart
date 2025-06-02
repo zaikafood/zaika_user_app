@@ -34,6 +34,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../api/api_checker.dart';
+
 class DeliveryManRegistrationScreen extends StatefulWidget {
   const DeliveryManRegistrationScreen({super.key});
 
@@ -64,6 +66,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
   @override
   void initState() {
     super.initState();
+    ApiChecker.errors.clear();
 
     _countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).dialCode;
     if(Get.find<DeliverymanRegistrationController>().showPassView){
@@ -176,64 +179,77 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                 Text('identity_image'.tr, style: robotoRegular),
                                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                                Stack(clipBehavior: Clip.none, children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                    child: deliverymanController.pickedImage != null ? GetPlatform.isWeb ? Image.network(
-                                      deliverymanController.pickedImage!.path, width: 150, height: 140, fit: BoxFit.cover,
-                                    ) : Image.file(
-                                      File(deliverymanController.pickedImage!.path), width: 150, height: 140, fit: BoxFit.cover,
-                                    ) : SizedBox(
-                                      width: 150, height: 140,
-                                      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Stack(clipBehavior: Clip.none, children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                        child: deliverymanController.pickedImage != null ? GetPlatform.isWeb ? Image.network(
+                                          deliverymanController.pickedImage!.path, width: 150, height: 140, fit: BoxFit.cover,
+                                        ) : Image.file(
+                                          File(deliverymanController.pickedImage!.path), width: 150, height: 140, fit: BoxFit.cover,
+                                        ) : SizedBox(
+                                          width: 150, height: 140,
+                                          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                                        Icon(CupertinoIcons.camera_fill, size: 40, color: Theme.of(context).disabledColor.withValues(alpha: 0.7)),
-                                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                                            Icon(CupertinoIcons.camera_fill, size: 40, color: Theme.of(context).disabledColor.withValues(alpha: 0.7)),
+                                            const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
-                                          child: Text(
-                                            'upload_profile_picture'.tr,
-                                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor), textAlign: TextAlign.center,
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
+                                              child: Text(
+                                                'upload_profile_picture'.tr,
+                                                style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor), textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                      ),
+
+                                      Positioned(
+                                        bottom: 0, right: 0, top: 0, left: 0,
+                                        child: InkWell(
+                                          onTap: () => deliverymanController.pickDmImage(true, false),
+                                          child: DottedBorder(
+                                            color: Theme.of(context).primaryColor,
+                                            strokeWidth: 1,
+                                            strokeCap: StrokeCap.butt,
+                                            dashPattern: const [5, 5],
+                                            padding: const EdgeInsets.all(0),
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(Dimensions.radiusDefault),
+                                            child: const SizedBox(),
                                           ),
                                         ),
-                                      ]),
-                                    ),
-                                  ),
-
-                                  Positioned(
-                                    bottom: 0, right: 0, top: 0, left: 0,
-                                    child: InkWell(
-                                      onTap: () => deliverymanController.pickDmImage(true, false),
-                                      child: DottedBorder(
-                                        color: Theme.of(context).primaryColor,
-                                        strokeWidth: 1,
-                                        strokeCap: StrokeCap.butt,
-                                        dashPattern: const [5, 5],
-                                        padding: const EdgeInsets.all(0),
-                                        borderType: BorderType.RRect,
-                                        radius: const Radius.circular(Dimensions.radiusDefault),
-                                        child: const SizedBox(),
                                       ),
-                                    ),
-                                  ),
 
-                                  deliverymanController.pickedImage != null ? Positioned(
-                                    bottom: -10, right: -10,
-                                    child: InkWell(
-                                      onTap: () => deliverymanController.removeDmImage(),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Theme.of(context).cardColor, width: 2),
-                                          shape: BoxShape.circle, color: Theme.of(context).colorScheme.error,
+                                      deliverymanController.pickedImage != null ? Positioned(
+                                        bottom: -10, right: -10,
+                                        child: InkWell(
+                                          onTap: () => deliverymanController.removeDmImage(),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Theme.of(context).cardColor, width: 2),
+                                              shape: BoxShape.circle, color: Theme.of(context).colorScheme.error,
+                                            ),
+                                            padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                            child:  Icon(Icons.remove, size: 18, color: Theme.of(context).cardColor,),
+                                          ),
                                         ),
-                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                        child:  Icon(Icons.remove, size: 18, color: Theme.of(context).cardColor,),
-                                      ),
-                                    ),
 
-                                  ) : const SizedBox(),
-                                ]),
+                                      ) : const SizedBox(),
+                                    ]),
+                                    if (ApiChecker.errors['image'] != null)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 4.0),
+                                        child: Text(
+                                          ApiChecker.errors['image']!,
+                                          style: TextStyle(color: Colors.red, fontSize: 12),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
                                 Text(
@@ -258,6 +274,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
 
                                 CustomTextFieldWidget(
                                   titleText: 'write_first_name'.tr,
+                                  errorText: ApiChecker.errors['f_name'],
                                   controller: _fNameController,
                                   capitalization: TextCapitalization.words,
                                   inputType: TextInputType.name,
@@ -272,6 +289,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
 
                                 CustomTextFieldWidget(
                                   titleText: 'write_last_name'.tr,
+                                  errorText: ApiChecker.errors['l_name'],
                                   controller: _lNameController,
                                   capitalization: TextCapitalization.words,
                                   inputType: TextInputType.name,
@@ -287,6 +305,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                 CustomTextFieldWidget(
                                   titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'write_phone_number'.tr,
                                   controller: _phoneController,
+                                  errorText: ApiChecker.errors['phone'],
                                   focusNode: _phoneNode,
                                   nextFocus: _emailNode,
                                   inputType: TextInputType.phone,
@@ -310,6 +329,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                   inputType: TextInputType.emailAddress,
                                   prefixIcon: CupertinoIcons.mail_solid,
                                   labelText: 'email'.tr,
+                                  errorText: ApiChecker.errors['email'],
                                   required: true,
                                   validator: (value) => ValidateCheck.validateEmail(value),
                                 ),
@@ -336,6 +356,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                     }
                                   },
                                   labelText: 'password'.tr,
+                                  errorText: ApiChecker.errors['password'],
                                   required: true,
                                   validator: (value) => ValidateCheck.validateEmptyText(value, "enter_password_for_delivery_man".tr),
                                 ),
@@ -353,6 +374,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                   prefixIcon: Icons.lock,
                                   isPassword: true,
                                   labelText: 'confirm_password'.tr,
+                                  errorText: ApiChecker.errors['confirm_password'],
                                   required: true,
                                   validator: (value) => ValidateCheck.validateConfirmPassword(value, _passwordController.text),
                                 ),
@@ -450,69 +472,95 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
 
                               const SizedBox(height: Dimensions.paddingSizeOverLarge),
 
-                              deliverymanController.vehicleIds != null ? Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                    color: Theme.of(context).cardColor,
-                                    border: Border.all(color: Theme.of(context).disabledColor, width: 0.3)
-                                ),
-                                child: CustomDropdown<int>(
-                                  onChange: (int? value, int index) {
-                                    deliverymanController.setVehicleIndex(index, true);
-                                  },
-                                  indexZeroNotSelected: true,
-                                  dropdownButtonStyle: DropdownButtonStyle(
-                                    height: 50,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: Dimensions.paddingSizeExtraSmall,
-                                      horizontal: Dimensions.paddingSizeExtraSmall,
+                              deliverymanController.vehicleIds != null ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                        color: Theme.of(context).cardColor,
+                                        border: Border.all(color: Theme.of(context).disabledColor, width: 0.3)
                                     ),
-                                    primaryColor: Theme.of(context).textTheme.bodyLarge!.color,
+                                    child: CustomDropdown<int>(
+                                      onChange: (int? value, int index) {
+                                        deliverymanController.setVehicleIndex(index, true);
+                                      },
+                                      indexZeroNotSelected: true,
+                                      dropdownButtonStyle: DropdownButtonStyle(
+                                        height: 50,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: Dimensions.paddingSizeExtraSmall,
+                                          horizontal: Dimensions.paddingSizeExtraSmall,
+                                        ),
+                                        primaryColor: Theme.of(context).textTheme.bodyLarge!.color,
+                                      ),
+                                      dropdownStyle: DropdownStyle(
+                                        elevation: 10,
+                                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                      ),
+                                      items: vehicleList,
+                                      child: Text(
+                                        deliverymanController.vehicles![deliverymanController.vehicleIndex!].type!.tr,
+                                        style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color),
+                                      ),
+                                    ),
                                   ),
-                                  dropdownStyle: DropdownStyle(
-                                    elevation: 10,
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                    padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                  ),
-                                  items: vehicleList,
-                                  child: Text(
-                                    deliverymanController.vehicles![deliverymanController.vehicleIndex!].type!.tr,
-                                    style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color),
-                                  ),
-                                ),
+                                  if (ApiChecker.errors['vehicle_id'] != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Text(
+                                        ApiChecker.errors['vehicle_id']!,
+                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
+                                ],
                               ) : const CircularProgressIndicator(),
                               const SizedBox(height: Dimensions.paddingSizeOverLarge),
 
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                    color: Theme.of(context).cardColor,
-                                    border: Border.all(color: Theme.of(context).disabledColor, width: 0.3)
-                                ),
-                                child: CustomDropdown<int>(
-                                  onChange: (int? value, int index) {
-                                    deliverymanController.setIdentityTypeIndex(deliverymanController.identityTypeList[index], true);
-                                  },
-                                  indexZeroNotSelected: true,
-                                  dropdownButtonStyle: DropdownButtonStyle(
-                                    height: 50,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: Dimensions.paddingSizeExtraSmall,
-                                      horizontal: Dimensions.paddingSizeExtraSmall,
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                        color: Theme.of(context).cardColor,
+                                        border: Border.all(color: Theme.of(context).disabledColor, width: 0.3)
                                     ),
-                                    primaryColor: Theme.of(context).textTheme.bodyLarge!.color,
+                                    child: CustomDropdown<int>(
+                                      onChange: (int? value, int index) {
+                                        deliverymanController.setIdentityTypeIndex(deliverymanController.identityTypeList[index], true);
+                                      },
+                                      indexZeroNotSelected: true,
+                                      dropdownButtonStyle: DropdownButtonStyle(
+                                        height: 50,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: Dimensions.paddingSizeExtraSmall,
+                                          horizontal: Dimensions.paddingSizeExtraSmall,
+                                        ),
+                                        primaryColor: Theme.of(context).textTheme.bodyLarge!.color,
+                                      ),
+                                      dropdownStyle: DropdownStyle(
+                                        elevation: 10,
+                                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                      ),
+                                      items: identityTypeList,
+                                      child: Text(
+                                        deliverymanController.identityTypeList[deliverymanController.identityTypeIndex].tr,
+                                        style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color),
+                                      ),
+                                    ),
                                   ),
-                                  dropdownStyle: DropdownStyle(
-                                    elevation: 10,
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                    padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                  ),
-                                  items: identityTypeList,
-                                  child: Text(
-                                    deliverymanController.identityTypeList[deliverymanController.identityTypeIndex].tr,
-                                    style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color),
-                                  ),
-                                ),
+                                  if (ApiChecker.errors['identity_type'] != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Text(
+                                        ApiChecker.errors['identity_type']!,
+                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
+                                ],
                               ),
                               const SizedBox(height: Dimensions.paddingSizeOverLarge),
 
@@ -523,6 +571,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                 focusNode: _identityNumberNode,
                                 inputAction: TextInputAction.done,
                                 labelText: 'identity_number'.tr,
+                                errorText: ApiChecker.errors['identity_number'],
                                 required: true,
                                 isEnabled: deliverymanController.identityTypeIndex != 0,
                                 fromDeliveryRegistration: true,
@@ -536,6 +585,8 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: deliverymanController.pickedIdentities.length + 1,
                                 itemBuilder: (context, index) {
+                                  final errorKey = 'identity_image.$index';
+                                  final errorMessage = ApiChecker.errors[errorKey];
                                   XFile? file = index == deliverymanController.pickedIdentities.length ? null : deliverymanController.pickedIdentities[index];
                                   if(index < 5 && index == deliverymanController.pickedIdentities.length) {
                                     return InkWell(
@@ -568,39 +619,52 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                   }
                                   return file != null ? Padding(
                                     padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-                                    child: DottedBorder(
-                                      color: Theme.of(context).disabledColor,
-                                      strokeWidth: 1,
-                                      strokeCap: StrokeCap.butt,
-                                      dashPattern: const [5, 5],
-                                      padding: const EdgeInsets.all(5),
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(Dimensions.radiusDefault),
-                                      child: Stack(children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                          child: GetPlatform.isWeb ? Image.network(
-                                            file.path, width: double.infinity, height: 130, fit: BoxFit.cover,
-                                          ) : Image.file(
-                                            File(file.path), width: double.infinity, height: 130, fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 10, top: 10,
-                                          child: InkWell(
-                                            onTap: () => deliverymanController.removeIdentityImage(index),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context).cardColor,
-                                                border: Border.all(color: Theme.of(context).primaryColor),
-                                                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        DottedBorder(
+                                          color: Theme.of(context).disabledColor,
+                                          strokeWidth: 1,
+                                          strokeCap: StrokeCap.butt,
+                                          dashPattern: const [5, 5],
+                                          padding: const EdgeInsets.all(5),
+                                          borderType: BorderType.RRect,
+                                          radius: const Radius.circular(Dimensions.radiusDefault),
+                                          child: Stack(children: [
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                              child: GetPlatform.isWeb ? Image.network(
+                                                file.path, width: double.infinity, height: 130, fit: BoxFit.cover,
+                                              ) : Image.file(
+                                                File(file.path), width: double.infinity, height: 130, fit: BoxFit.cover,
                                               ),
-                                              padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                                              child: const Icon(CupertinoIcons.trash, color: Colors.red),
+                                            ),
+                                            Positioned(
+                                              right: 10, top: 10,
+                                              child: InkWell(
+                                                onTap: () => deliverymanController.removeIdentityImage(index),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(context).cardColor,
+                                                    border: Border.all(color: Theme.of(context).primaryColor),
+                                                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                                  ),
+                                                  padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                                                  child: const Icon(CupertinoIcons.trash, color: Colors.red),
+                                                ),
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                        if (errorMessage != null)
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 4.0),
+                                            child: Text(
+                                              errorMessage,
+                                              style: TextStyle(color: Colors.red, fontSize: 12),
                                             ),
                                           ),
-                                        ),
-                                      ]),
+                                      ],
                                     ),
                                   ) : const SizedBox();
                                 },
@@ -856,7 +920,13 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
         print('-------final data-- :  $data');
       }
 
-      deliverymanController.registerDeliveryMan(data, additionalDocuments, additionalDocumentsInputType);
+      deliverymanController.registerDeliveryMan(data, additionalDocuments, additionalDocumentsInputType).then((value) {
+        if (!validateStep01()) {
+          deliverymanController.dmStatusChange(0.1);
+          _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+          return;
+        }
+      },);
 
     }
   }
@@ -937,5 +1007,29 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
       )));
     }
     return identityTypeList;
+  }
+  bool validateStep01(){
+    if (ApiChecker.errors['image'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['f_name'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['l_name'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['email'] != null){
+      return false;
+    }
+    if(ApiChecker.errors['phone'] != null){
+      return false;
+    }
+    if(ApiChecker.errors['password'] != null){
+      return false;
+    }
+    if(ApiChecker.errors['confirm_password'] != null){
+      return false;
+    }
+    return true;
   }
 }

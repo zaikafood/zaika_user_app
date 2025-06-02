@@ -1,3 +1,4 @@
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
 import 'package:zaika/features/auth/screens/sign_in_screen.dart';
 import 'package:zaika/features/profile/controllers/profile_controller.dart';
@@ -75,6 +76,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                     CustomTextFieldWidget(
                       hintText: '8+characters'.tr,
                       controller: _newPasswordController,
+                      errorText: ApiChecker.errors['new_password'],
                       focusNode: _newPasswordFocus,
                       nextFocus: _confirmPasswordFocus,
                       inputType: TextInputType.visiblePassword,
@@ -89,6 +91,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                     CustomTextFieldWidget(
                       hintText: '8+characters'.tr,
                       controller: _confirmPasswordController,
+                      errorText: ApiChecker.errors['confirm_password'],
                       focusNode: _confirmPasswordFocus,
                       inputAction: TextInputAction.done,
                       inputType: TextInputType.visiblePassword,

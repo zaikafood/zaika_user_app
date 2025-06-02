@@ -42,6 +42,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../api/api_checker.dart';
+
 class RestaurantRegistrationScreen extends StatefulWidget {
   const RestaurantRegistrationScreen({super.key});
 
@@ -242,6 +244,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
 
                                     CustomTextFieldWidget(
                                       titleText: 'write_restaurant_name'.tr,
+                                      errorText: ApiChecker.errors['name'],
                                       controller: _nameController[_tabController!.index],
                                       focusNode: _nameFocus[_tabController!.index],
                                       nextFocus: _tabController!.index != _languageList!.length-1 ? _addressFocus[_tabController!.index] : _addressFocus[0],
@@ -262,66 +265,79 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                                             Text('restaurant_logo'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault)),
                                             const SizedBox(height: Dimensions.paddingSizeDefault),
 
-                                            Align(alignment: Alignment.center, child: Stack(children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(5.0),
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                  child: restaurantRegController.pickedLogo != null ? GetPlatform.isWeb ? Image.network(
-                                                    restaurantRegController.pickedLogo!.path, width: 150, height: 120, fit: BoxFit.cover,
-                                                  ) : Image.file(
-                                                    File(restaurantRegController.pickedLogo!.path), width: 150, height: 120, fit: BoxFit.cover,
-                                                  ) : SizedBox(
-                                                    width: 150, height: 120,
-                                                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                            Align(alignment: Alignment.center, child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Stack(children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                      child: restaurantRegController.pickedLogo != null ? GetPlatform.isWeb ? Image.network(
+                                                        restaurantRegController.pickedLogo!.path, width: 150, height: 120, fit: BoxFit.cover,
+                                                      ) : Image.file(
+                                                        File(restaurantRegController.pickedLogo!.path), width: 150, height: 120, fit: BoxFit.cover,
+                                                      ) : SizedBox(
+                                                        width: 150, height: 120,
+                                                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                                                      Icon(CupertinoIcons.photo_camera_solid, size: 38, color: Theme.of(context).disabledColor.withValues(alpha: 0.6)),
-                                                      const SizedBox(height: Dimensions.paddingSizeSmall),
+                                                          Icon(CupertinoIcons.photo_camera_solid, size: 38, color: Theme.of(context).disabledColor.withValues(alpha: 0.6)),
+                                                          const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                                                      Text(
-                                                        'upload_store_logo'.tr,
-                                                        style: robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center,
-                                                      ),
-                                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                                                      Text(
-                                                        '(${'1_1_ratio'.tr})',
-                                                        style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2), textAlign: TextAlign.center,
-                                                      ),
-
-                                                    ]),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0, right: 0, top: 0, left: 0,
-                                                child: InkWell(
-                                                  onTap: () => restaurantRegController.pickImage(true, false),
-                                                  child: DottedBorder(
-                                                    color: Theme.of(context).primaryColor,
-                                                    strokeWidth: 1,
-                                                    strokeCap: StrokeCap.butt,
-                                                    dashPattern: const [5, 5],
-                                                    padding: const EdgeInsets.all(0),
-                                                    borderType: BorderType.RRect,
-                                                    radius: const Radius.circular(Dimensions.radiusDefault),
-                                                    child: Center(
-                                                      child: Visibility(
-                                                        visible: restaurantRegController.pickedLogo != null,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.all(25),
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(width: 2, color: Colors.white),
-                                                            shape: BoxShape.circle,
+                                                          Text(
+                                                            'upload_store_logo'.tr,
+                                                            style: robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center,
                                                           ),
-                                                          child: const Icon(CupertinoIcons.photo_camera_solid, color: Colors.white),
+                                                          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                                                          Text(
+                                                            '(${'1_1_ratio'.tr})',
+                                                            style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2), textAlign: TextAlign.center,
+                                                          ),
+
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 0, right: 0, top: 0, left: 0,
+                                                    child: InkWell(
+                                                      onTap: () => restaurantRegController.pickImage(true, false),
+                                                      child: DottedBorder(
+                                                        color: Theme.of(context).primaryColor,
+                                                        strokeWidth: 1,
+                                                        strokeCap: StrokeCap.butt,
+                                                        dashPattern: const [5, 5],
+                                                        padding: const EdgeInsets.all(0),
+                                                        borderType: BorderType.RRect,
+                                                        radius: const Radius.circular(Dimensions.radiusDefault),
+                                                        child: Center(
+                                                          child: Visibility(
+                                                            visible: restaurantRegController.pickedLogo != null,
+                                                            child: Container(
+                                                              padding: const EdgeInsets.all(25),
+                                                              decoration: BoxDecoration(
+                                                                border: Border.all(width: 2, color: Colors.white),
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: const Icon(CupertinoIcons.photo_camera_solid, color: Colors.white),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                            ])),
+                                                ]),
+                                                if (ApiChecker.errors['logo'] != null)
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 4.0),
+                                                    child: Text(
+                                                      ApiChecker.errors['logo']!,
+                                                      style: TextStyle(color: Colors.red, fontSize: 12),
+                                                    ),
+                                                  ),
+                                              ],
+                                            )),
                                           ],
                                         ),
                                       ),
@@ -334,73 +350,86 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                                             Text('restaurant_cover'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault)),
                                             const SizedBox(height: Dimensions.paddingSizeDefault),
 
-                                            Stack(children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(5.0),
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                  child: restaurantRegController.pickedCover != null ? GetPlatform.isWeb ? Image.network(
-                                                    restaurantRegController.pickedCover!.path, width: context.width, height: 120, fit: BoxFit.cover,
-                                                  ) : Image.file(
-                                                    File(restaurantRegController.pickedCover!.path), width: context.width, height: 120, fit: BoxFit.cover,
-                                                  ) : SizedBox(
-                                                    width: context.width, height: 120,
-                                                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Stack(children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                      child: restaurantRegController.pickedCover != null ? GetPlatform.isWeb ? Image.network(
+                                                        restaurantRegController.pickedCover!.path, width: context.width, height: 120, fit: BoxFit.cover,
+                                                      ) : Image.file(
+                                                        File(restaurantRegController.pickedCover!.path), width: context.width, height: 120, fit: BoxFit.cover,
+                                                      ) : SizedBox(
+                                                        width: context.width, height: 120,
+                                                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                                                      Icon(CupertinoIcons.photo_camera_solid, size: 38, color: Theme.of(context).disabledColor.withValues(alpha: 0.6)),
+                                                          Icon(CupertinoIcons.photo_camera_solid, size: 38, color: Theme.of(context).disabledColor.withValues(alpha: 0.6)),
 
-                                                      Text(
-                                                        'upload_store_cover'.tr,
-                                                        style: robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center,
-                                                      ),
-
-                                                      Text(
-                                                        'upload_jpg_png_gif_maximum_2_mb'.tr,
-                                                        style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                                                      Text(
-                                                        '(${'1_2_ratio'.tr})',
-                                                        style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2), textAlign: TextAlign.center,
-                                                      ),
-
-                                                    ]),
-                                                  ),
-                                                ),
-                                              ),
-
-
-                                              Positioned(
-                                                bottom: 0, right: 0, top: 0, left: 0,
-                                                child: InkWell(
-                                                  onTap: () => restaurantRegController.pickImage(false, false),
-                                                  child: DottedBorder(
-                                                    color: Theme.of(context).primaryColor,
-                                                    strokeWidth: 1,
-                                                    strokeCap: StrokeCap.butt,
-                                                    dashPattern: const [5, 5],
-                                                    padding: const EdgeInsets.all(0),
-                                                    borderType: BorderType.RRect,
-                                                    radius: const Radius.circular(Dimensions.radiusDefault),
-                                                    child: Center(
-                                                      child: Visibility(
-                                                        visible: restaurantRegController.pickedCover != null,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.all(25),
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(width: 3, color: Colors.white),
-                                                            shape: BoxShape.circle,
+                                                          Text(
+                                                            'upload_store_cover'.tr,
+                                                            style: robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center,
                                                           ),
-                                                          child: const Icon(CupertinoIcons.photo_camera_solid, color: Colors.white, size: 50),
+
+                                                          Text(
+                                                            'upload_jpg_png_gif_maximum_2_mb'.tr,
+                                                            style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                                                          Text(
+                                                            '(${'1_2_ratio'.tr})',
+                                                            style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.6), fontSize: Dimensions.fontSizeSmall - 2), textAlign: TextAlign.center,
+                                                          ),
+
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                  ),
+
+
+                                                  Positioned(
+                                                    bottom: 0, right: 0, top: 0, left: 0,
+                                                    child: InkWell(
+                                                      onTap: () => restaurantRegController.pickImage(false, false),
+                                                      child: DottedBorder(
+                                                        color: Theme.of(context).primaryColor,
+                                                        strokeWidth: 1,
+                                                        strokeCap: StrokeCap.butt,
+                                                        dashPattern: const [5, 5],
+                                                        padding: const EdgeInsets.all(0),
+                                                        borderType: BorderType.RRect,
+                                                        radius: const Radius.circular(Dimensions.radiusDefault),
+                                                        child: Center(
+                                                          child: Visibility(
+                                                            visible: restaurantRegController.pickedCover != null,
+                                                            child: Container(
+                                                              padding: const EdgeInsets.all(25),
+                                                              decoration: BoxDecoration(
+                                                                border: Border.all(width: 3, color: Colors.white),
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: const Icon(CupertinoIcons.photo_camera_solid, color: Colors.white, size: 50),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                            ]),
+                                                ]),
+                                                if (ApiChecker.errors['cover_photo'] != null)
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 4.0),
+                                                    child: Text(
+                                                      ApiChecker.errors['cover_photo']!,
+                                                      style: TextStyle(color: Colors.red, fontSize: 12),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -435,6 +464,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
 
                                     CustomTextFieldWidget(
                                       titleText: 'write_vat_tax_amount'.tr,
+                                      errorText: ApiChecker.errors['vat'],
                                       controller: _vatController,
                                       focusNode: _vatFocus,
                                       inputAction: TextInputAction.done,
@@ -525,6 +555,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
 
                                     CustomTextFieldWidget(
                                       titleText: 'write_first_name'.tr,
+                                      errorText: ApiChecker.errors['fName'],
                                       controller: _fNameController,
                                       focusNode: _fNameFocus,
                                       nextFocus: _lNameFocus,
@@ -540,6 +571,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
 
                                     CustomTextFieldWidget(
                                       titleText: 'write_last_name'.tr,
+                                      errorText: ApiChecker.errors['lName'],
                                       controller: _lNameController,
                                       focusNode: _lNameFocus,
                                       nextFocus: _phoneFocus,
@@ -556,6 +588,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                                     CustomTextFieldWidget(
                                       titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'enter_phone_number'.tr,
                                       controller: _phoneController,
+                                      errorText: ApiChecker.errors['phone'],
                                       focusNode: _phoneFocus,
                                       nextFocus: _emailFocus,
                                       inputType: TextInputType.phone,
@@ -574,6 +607,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
 
                                     CustomTextFieldWidget(
                                       titleText: 'write_email'.tr,
+                                      errorText: ApiChecker.errors['email'],
                                       controller: _emailController,
                                       focusNode: _emailFocus,
                                       nextFocus: _passwordFocus,
@@ -590,6 +624,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                                       return Column(children: [
                                         CustomTextFieldWidget(
                                           titleText: '8+characters'.tr,
+                                          errorText: ApiChecker.errors['password'],
                                           controller: _passwordController,
                                           focusNode: _passwordFocus,
                                           nextFocus: _confirmPasswordFocus,
@@ -623,6 +658,7 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                                     CustomTextFieldWidget(
                                       titleText: '8+characters'.tr,
                                       controller: _confirmPasswordController,
+                                      errorText: ApiChecker.errors['confirm_password'],
                                       focusNode: _confirmPasswordFocus,
                                       inputType: TextInputType.visiblePassword,
                                       inputAction: TextInputAction.done,
@@ -1530,7 +1566,19 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
                   'additional_data': jsonEncode(additionalData),
                 });
 
-                restaurantRegiController.registerRestaurant(data, additionalDocuments, additionalDocumentsInputType);
+                restaurantRegiController.registerRestaurant(data, additionalDocuments, additionalDocumentsInputType).then((value) {
+                  if (!validateStep01()) {
+                    restaurantRegiController.storeStatusChange(0.1);
+                    _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+                    return;
+                  }
+
+                  if (!validateStep06()) {
+                    restaurantRegiController.storeStatusChange(0.6);
+                    _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+                    return;
+                  }
+                },);
               }
 
             },
@@ -1538,5 +1586,42 @@ class _RestaurantRegistrationScreenState extends State<RestaurantRegistrationScr
         ],
       );
     });
+  }
+
+  bool validateStep01(){
+    if (ApiChecker.errors['name'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['vat'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['logo'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['cover_photo'] != null){
+      return false;
+    }
+    return true;
+  }
+  bool validateStep06(){
+    if (ApiChecker.errors['email'] != null){
+      return false;
+    }if (ApiChecker.errors['fName'] != null){
+      return false;
+    }
+    if (ApiChecker.errors['lName'] != null){
+      return false;
+    }
+
+    if(ApiChecker.errors['phone'] != null){
+      return false;
+    }
+    if(ApiChecker.errors['password'] != null){
+      return false;
+    }
+    if(ApiChecker.errors['confirm_password'] != null){
+      return false;
+    }
+    return true;
   }
 }

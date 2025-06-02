@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
 import 'package:zaika/features/language/controllers/localization_controller.dart';
 import 'package:zaika/features/splash/controllers/splash_controller.dart';
@@ -98,6 +99,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                         child: CustomTextFieldWidget(
                           titleText: 'xxx-xxx-xxxxx'.tr,
                           controller: _numberController,
+                          errorText: ApiChecker.errors['phone'],
                           focusNode: _numberFocusNode,
                           inputType: TextInputType.phone,
                           inputAction: TextInputAction.done,
