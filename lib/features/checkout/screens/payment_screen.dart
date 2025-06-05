@@ -216,7 +216,7 @@ class MyInAppBrowser extends InAppBrowser {
     }
 
     final uri = navigationAction.request.url;
-    if (uri != null && !["http", "https"].contains(uri.scheme)) {
+    if (uri != null && !["http", "https", "file", "chrome", "data", "javascript", "about"].contains(uri.scheme)) {
       try {
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
