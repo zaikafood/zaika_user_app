@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:533169250177:android:1d69de6b7ab849095ed280",
+        "android_client_info": {
+          "package_name": "com.zaika.delivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGJenQNd-KCVh4vaL4u8D0gRXfCQKYW2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:533169250177:android:993c8e6840cf1ce25ed280",
         "android_client_info": {
           "package_name": "com.zaika.restaurant"
