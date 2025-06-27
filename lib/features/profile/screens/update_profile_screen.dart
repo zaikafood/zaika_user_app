@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_app_bar_widget.dart';
 import 'package:zaika/common/widgets/custom_loader_widget.dart';
 import 'package:zaika/common/widgets/validate_check.dart';
@@ -50,6 +51,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void initState() {
     super.initState();
     _initCall();
+    ApiChecker.errors.clear();
   }
 
   void _initCall(){
@@ -127,6 +129,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                               CustomTextFieldWidget(
                                 titleText: 'enter_name'.tr,
+                                errorText: ApiChecker.errors['name'],
                                 controller: _nameController,
                                 capitalization: TextCapitalization.words,
                                 inputType: TextInputType.name,
@@ -143,6 +146,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 children: [
                                   CustomTextFieldWidget(
                                     titleText: 'write_phone_number'.tr,
+                                    errorText: ApiChecker.errors['phone'],
                                     controller: _phoneController,
                                     focusNode: _phoneFocus,
                                     inputType: TextInputType.phone,
@@ -180,6 +184,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 inputType: TextInputType.emailAddress,
                                 prefixIcon: CupertinoIcons.mail_solid,
                                 labelText: 'email'.tr,
+                                errorText: ApiChecker.errors['email'],
                                 required: true,
                                 validator: (value) => ValidateCheck.validateEmail(value),
                                 suffixImage: profileController.userInfoModel!.isEmailVerified! && profileController.userInfoModel!.email == _emailController.text
@@ -211,35 +216,48 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                       Positioned(
                         top: -50, left: 0, right: 0,
-                        child: Center(child: Stack(children: [
-                          ClipOval(child: profileController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
-                            profileController.pickedFile!.path, width: 100, height: 100, fit: BoxFit.cover) : Image.file(
-                            File(profileController.pickedFile!.path), width: 100, height: 100, fit: BoxFit.cover) : CustomImageWidget(
-                            image: '${profileController.userInfoModel!.imageFullUrl}',
-                            height: 100, width: 100, fit: BoxFit.cover, placeholder: isLoggedIn ? Images.profilePlaceholder : Images.guestIcon, imageColor: isLoggedIn ? Theme.of(context).hintColor : null,
-                          )),
+                        child: Center(child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Stack(children: [
+                              ClipOval(child: profileController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
+                                profileController.pickedFile!.path, width: 100, height: 100, fit: BoxFit.cover) : Image.file(
+                                File(profileController.pickedFile!.path), width: 100, height: 100, fit: BoxFit.cover) : CustomImageWidget(
+                                image: '${profileController.userInfoModel!.imageFullUrl}',
+                                height: 100, width: 100, fit: BoxFit.cover, placeholder: isLoggedIn ? Images.profilePlaceholder : Images.guestIcon, imageColor: isLoggedIn ? Theme.of(context).hintColor : null,
+                              )),
 
-                          Positioned(
-                            bottom: 0, right: 0, top: 0, left: 0,
-                            child: InkWell(
-                              onTap: () => profileController.pickImage(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.3), shape: BoxShape.circle,
-                                  border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                                ),
-                                child: Container(
-                                  margin: const EdgeInsets.all(25),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(width: 2, color: Colors.white),
-                                    shape: BoxShape.circle,
+                              Positioned(
+                                bottom: 0, right: 0, top: 0, left: 0,
+                                child: InkWell(
+                                  onTap: () => profileController.pickImage(),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(alpha: 0.3), shape: BoxShape.circle,
+                                      border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+                                    ),
+                                    child: Container(
+                                      margin: const EdgeInsets.all(25),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 2, color: Colors.white),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(Icons.camera_alt, color: Colors.white),
+                                    ),
                                   ),
-                                  child: const Icon(Icons.camera_alt, color: Colors.white),
                                 ),
                               ),
-                            ),
-                          ),
-                        ])),
+                            ]),
+                            if (ApiChecker.errors['image'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  ApiChecker.errors['image']!,
+                                  style: TextStyle(color: Colors.red, fontSize: 12),
+                                ),
+                              ),
+                          ],
+                        )),
                       ),
 
                     ]),

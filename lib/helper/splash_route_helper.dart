@@ -67,8 +67,8 @@ Future<void> _forLoggedInUserRouteProcess() async {
   Get.find<AuthController>().updateToken();
   await Get.find<FavouriteController>().getFavouriteList();
   if (AddressHelper.getAddressFromSharedPref() != null) {
-    Get.offNamed(RouteHelper.getAdVideoRoute());
-    // Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true ));
+    // Get.offNamed(RouteHelper.getAdVideoRoute());
+    Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true ));
   } else {
     Get.offNamed(RouteHelper.getAccessLocationRoute('splash'));
   }
@@ -84,8 +84,8 @@ void _newlyRegisteredRouteProcess() {
 
 void _forGuestUserRouteProcess() {
   if (AddressHelper.getAddressFromSharedPref() != null) {
-    Get.offNamed(RouteHelper.getAdVideoRoute());
-    // Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+    // Get.offNamed(RouteHelper.getAdVideoRoute());
+    Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
   } else {
     Get.find<SplashController>().navigateToLocationScreen('splash', offNamed: true);
   }

@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zaika/api/api_checker.dart';
 import 'package:zaika/common/widgets/custom_button_widget.dart';
 import 'package:zaika/common/widgets/custom_snackbar_widget.dart';
 import 'package:zaika/common/widgets/custom_text_field_widget.dart';
@@ -97,6 +98,7 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
                 CustomTextFieldWidget(
                   hintText: 'ex_jhon'.tr,
                   labelText: 'user_name'.tr,
+                  errorText: ApiChecker.errors['name'],
                   showLabelText: true,
                   required: true,
                   controller: _nameController,
@@ -113,6 +115,7 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
                 _isSocial ? CustomTextFieldWidget(
                   hintText: 'xxx-xxx-xxxxx'.tr,
                   labelText: 'phone'.tr,
+                  errorText: ApiChecker.errors['phone'],
                   showLabelText: true,
                   required: true,
                   controller: _phoneController,
@@ -129,6 +132,7 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
                 ) : CustomTextFieldWidget(
                   hintText: 'enter_email'.tr,
                   labelText: 'email'.tr,
+                  errorText: ApiChecker.errors['email'],
                   showLabelText: true,
                   required: true,
                   controller: _emailController,
@@ -143,6 +147,7 @@ class _NewUserSetupScreenState extends State<NewUserSetupScreen> {
                 (Get.find<SplashController>().configModel!.refEarningStatus == 1 ) ? CustomTextFieldWidget(
                   hintText: 'refer_code'.tr,
                   labelText: 'refer_code'.tr,
+                  errorText: ApiChecker.errors['ref_code'],
                   showLabelText: true,
                   controller: _referCodeController,
                   focusNode: _referCodeFocus,

@@ -49,6 +49,7 @@ class CustomTextFieldWidget extends StatefulWidget {
   final String? suffixImage;
   final Function()? suffixOnPressed;
   final Function()? onTap;
+  final String? errorText;
 
   const CustomTextFieldWidget({
     super.key,
@@ -91,6 +92,7 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.suffixOnPressed,
     this.suffixImage,
     this.onTap,
+    this.errorText,
   });
 
   @override
@@ -161,6 +163,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
               ),
               isDense: true,
               hintText: widget.hintText.isEmpty ? widget.titleText : widget.hintText,
+              errorText: widget.errorText,
               fillColor: !widget.isEnabled ? Theme.of(context).disabledColor.withValues(alpha: 0.1) : Theme.of(context).cardColor,
               hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor.withValues(alpha: 0.7)),
               filled: true,
@@ -193,27 +196,29 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                   margin: const EdgeInsets.only(right: 0),
                   padding: const EdgeInsets.only(left: 5),
                   child: Center(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.network("https://flagcdn.com/w40/in.png",width: 25,fit: BoxFit.cover,),
-                        ),
-                        Text("+91 "),
-                      ],
-                    )
-                    // CodePickerWidget(
-                    //   flagWidth: 25,
-                    //   padding: EdgeInsets.zero,
-                    //   onChanged: widget.onCountryChanged,
-                    //   initialSelection: widget.countryDialCode,
-                    //   favorite: [widget.countryDialCode ?? ''],
-                    //   enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
-                    //   dialogBackgroundColor: Theme.of(context).cardColor,
-                    //   textStyle: robotoRegular.copyWith(
-                    //     fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
-                    //   ),
-                    // ),
+                    child: CodePickerWidget(
+                      flagWidth: 25,
+                      padding: EdgeInsets.zero,
+                      onChanged: widget.onCountryChanged,
+                      initialSelection: widget.countryDialCode,
+                      favorite: [widget.countryDialCode ?? ''],
+                      countryFilter: [widget.countryDialCode!],
+                      enabled: false,
+                      // enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
+                      dialogBackgroundColor: Theme.of(context).cardColor,
+                      textStyle: robotoRegular.copyWith(
+                        fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                    // child: Row(
+                    //   children: [
+                    //     Padding(
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       child: Image.network("https://flagcdn.com/w40/in.png",width: 25,fit: BoxFit.cover,),
+                    //     ),
+                    //     Text("+91 "),
+                    //   ],
+                    // )
                   ),
                 ),
 

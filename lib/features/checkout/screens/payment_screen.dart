@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zaika/features/checkout/widgets/payment_failed_dialog.dart';
 import 'package:zaika/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:zaika/features/splash/controllers/splash_controller.dart';
@@ -158,6 +159,7 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   Future onLoadStart(url) async {
+    print(":::::::::::url:::::::::$url:::::::::::::");
     if (kDebugMode) {
       print("\n\nStarted: $url\n\n");
     }
@@ -166,6 +168,7 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   Future onLoadStop(url) async {
+    print(":::::::::::url:::::::::$url:::::::::::::");
     pullToRefreshController?.endRefreshing();
     if (kDebugMode) {
       print("\n\nStopped: $url\n\n");
@@ -211,8 +214,24 @@ class MyInAppBrowser extends InAppBrowser {
     if (kDebugMode) {
       print("\n\nOverride ${navigationAction.request.url}\n\n");
     }
+
+    final uri = navigationAction.request.url;
+    if (uri != null && !["http", "https", "file", "chrome", "data", "javascript", "about"].contains(uri.scheme)) {
+      try {
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } else {
+          debugPrint("Could not launch $uri");
+        }
+      } catch (e) {
+        debugPrint("Exception while launching $uri: $e");
+      }
+      return NavigationActionPolicy.CANCEL;
+    }
+
     return NavigationActionPolicy.ALLOW;
   }
+
 
   @override
   void onLoadResource(resource) {
