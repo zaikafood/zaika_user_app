@@ -47,7 +47,7 @@ class DeliverymanRegistrationController extends GetxController implements GetxSe
   bool _spatialCheck = false;
   bool get spatialCheck => _spatialCheck;
 
-  final List<String> _identityTypeList = ['select_identity_type', 'passport', 'driving_license', 'nid'];
+  final List<String> _identityTypeList = ['select_identity_type', 'passport', 'driving_license',];
   List<String> get identityTypeList => _identityTypeList;
 
   int _identityTypeIndex = 0;
