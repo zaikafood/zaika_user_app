@@ -46,6 +46,10 @@ import 'package:zaika/features/product/domain/repositories/campaign_repository.d
 import 'package:zaika/features/product/domain/repositories/campaign_repository_interface.dart';
 import 'package:zaika/features/product/domain/services/campaign_service.dart';
 import 'package:zaika/features/product/domain/services/campaign_service_interface.dart';
+import 'package:zaika/features/refer%20and%20earn/domain/repositories/earn_refer_repository.dart';
+import 'package:zaika/features/refer%20and%20earn/domain/repositories/earn_refer_repository_interface.dart';
+import 'package:zaika/features/refer%20and%20earn/domain/services/earn_refer_service.dart';
+import 'package:zaika/features/refer%20and%20earn/domain/services/earn_refer_service_interface.dart';
 import 'package:zaika/features/restaurant/controllers/restaurant_controller.dart';
 import 'package:zaika/features/html/controllers/html_controller.dart';
 import 'package:zaika/features/html/domain/repositories/html_repository.dart';
@@ -314,7 +318,10 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => dineInRepositoryInterface);
   DineInServiceInterface dineInServiceInterface = DineInService(dineInRepositoryInterface: Get.find());
   Get.lazyPut(() => dineInServiceInterface);
-
+  EarnReferRepositoryInterface earnReferRepositoryInterface =EarnReferRepository(apiClient: Get.find());
+  Get.lazyPut(()=>earnReferRepositoryInterface);
+  EarnReferServiceInterface earnReferServiceInterface=EarnReferService(earnReferRepositoryInterface: Get.find());
+  Get.lazyPut(()=>earnReferServiceInterface);
 
   /// Controller
   Get.lazyPut(() => ThemeController(splashServiceInterface: Get.find()));
@@ -334,6 +341,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => CuisineController(cuisineServiceInterface: Get.find()));
   Get.lazyPut(() => FavouriteController(favouriteServiceInterface: Get.find()));
   Get.lazyPut(() => ProductController(productServiceInterface: Get.find()));
+  Get.lazyPut(() => ReferAndEarnController(earnReferServiceInterface:Get.find()));
   Get.lazyPut(() => ReviewController(reviewServiceInterface: Get.find()));
   Get.lazyPut(() => InterestController(interestServiceInterface: Get.find()));
   Get.lazyPut(() => WalletController(walletServiceInterface: Get.find()));
@@ -344,7 +352,6 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => HomeController(homeServiceInterface: Get.find()));
   Get.lazyPut(() => CartController(cartServiceInterface: Get.find()));
   Get.lazyPut(() => RestaurantController(restaurantServiceInterface: Get.find()));
-  Get.lazyPut(() => ReferAndEarnController());
   Get.lazyPut(() => SearchController(searchServiceInterface: Get.find()));
   Get.lazyPut(() => CouponController(couponServiceInterface: Get.find()));
   Get.lazyPut(() => OrderController(orderServiceInterface: Get.find()));

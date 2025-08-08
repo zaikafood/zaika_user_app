@@ -104,8 +104,11 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
         List<AddOns> addOnsList = _getAddonList(product!, productController);
 
         debugPrint('===total : $addonsCost + (($variationPriceWithDiscount + $price) , $discount , $discountType ) * ${productController.quantity}');
-        double priceWithAddonsVariationWithDiscount = addonsCost + (PriceConverter.convertWithDiscount(variationPrice + price , discount, discountType)! * productController.quantity!);
-        double priceWithAddonsVariation = ((price + variationPrice) * productController.quantity!) + addonsCost;
+        double effectivePrice = (variationPrice > 0) ? variationPrice : price;
+        double priceAfterDiscount = PriceConverter.convertWithDiscount(effectivePrice, discount, discountType)! * productController.quantity!;
+        double priceWithAddonsVariationWithDiscount = addonsCost + priceAfterDiscount;
+        double priceWithAddonsVariation = (effectivePrice * productController.quantity!) + addonsCost;
+
         double priceWithVariation = price + variationPrice;
         bool isAvailable = DateConverter.isAvailable(product!.availableTimeStarts, product!.availableTimeEnds);
 

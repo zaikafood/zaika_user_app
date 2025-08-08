@@ -124,6 +124,8 @@ class AppConstants {
   static const String firebaseAuthVerify = '/api/v1/auth/firebase-verify-token';
   static const String firebaseResetPassword = '/api/v1/auth/firebase-reset-password';
   static const String dineInRestaurantListUri = '/api/v1/restaurants/dine-in';
+  static const String getReferralDetail = '/api/v1/customer/referral-details';
+
 
   ///Subscription
   static const String businessPlanUri = '/api/v1/vendor/business_plan';

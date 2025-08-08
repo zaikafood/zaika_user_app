@@ -221,10 +221,12 @@ class AuthController extends GetxController implements GetxService {
   Future<void> firebaseVerifyPhoneNumber(String phoneNumber, String? token, String loginType, {bool fromSignUp = true, bool canRoute = true, UpdateUserModel? updateUserModel})async {
     _isLoading = true;
     update();
+  FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: false);
 
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) {},
+      // multiFactorInfo: MultiFactorInfo(factorId: factorId, enrollmentTimestamp: enrollmentTimestamp, displayName: displayName, uid: uid),
       verificationFailed: (FirebaseAuthException e) {
         _isLoading = false;
         update();
