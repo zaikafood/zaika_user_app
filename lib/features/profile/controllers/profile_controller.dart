@@ -105,8 +105,9 @@ class ProfileController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  void pickImage() async {
-    _pickedFile = await profileServiceInterface.pickImageFromGallery();
+  void pickImage(bool isCamera) async {
+    XFile? _pickedProfileFile = await ImagePicker().pickImage(source: isCamera ? ImageSource.camera : ImageSource.gallery, imageQuality: 50);
+    _pickedFile = _pickedProfileFile;
     update();
   }
 

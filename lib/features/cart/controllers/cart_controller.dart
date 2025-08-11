@@ -83,34 +83,50 @@ class CartController extends GetxController implements GetxService {
     double variationWithoutDiscountPrice = 0;
     double variationPrice = 0;
     for (var cartModel in _cartList) {
+      double itemBasePrice = cartModel.product!.price ?? 0;
+      int quantity = cartModel.quantity ?? 1;
 
-      variationWithoutDiscountPrice = 0;
-      variationPrice = 0;
-
-      double? discount = cartModel.product!.restaurantDiscount == 0 ? cartModel.product!.discount : cartModel.product!.restaurantDiscount;
-      String? discountType = cartModel.product!.restaurantDiscount == 0 ? cartModel.product!.discountType : 'percent';
+      double? discount = cartModel.product!.restaurantDiscount == 0
+          ? cartModel.product!.discount
+          : cartModel.product!.restaurantDiscount;
+      String? discountType = cartModel.product!.restaurantDiscount == 0
+          ? cartModel.product!.discountType
+          : 'percent';
 
       List<AddOns> addOnList = cartServiceInterface.prepareAddonList(cartModel);
-
       _addOnsList.add(addOnList);
-      _availableList.add(DateConverter.isAvailable(cartModel.product!.availableTimeStarts, cartModel.product!.availableTimeEnds));
-
+      _availableList.add(DateConverter.isAvailable(
+        cartModel.product!.availableTimeStarts,
+        cartModel.product!.availableTimeEnds,
+      ));
       _addOnsPrice = cartServiceInterface.calculateAddonsPrice(addOnList, _addOnsPrice, cartModel);
 
-      variationWithoutDiscountPrice = cartServiceInterface.calculateVariationWithoutDiscountPrice(cartModel, variationWithoutDiscountPrice, discount, discountType);
-      variationPrice = cartServiceInterface.calculateVariationPrice(cartModel, variationPrice);
+      double basePrice = itemBasePrice * quantity;
+      double discountPrice = PriceConverter.convertWithDiscount(itemBasePrice, discount, discountType)! * quantity;
+      double itemDiscountAmount = basePrice - discountPrice;
 
-      double price = (cartModel.product!.price! * cartModel.quantity!);
-      double discountPrice =  (price - (PriceConverter.convertWithDiscount(cartModel.product!.price!, discount, discountType)! * cartModel.quantity!));
+      // Calculate variation price
+      double itemVariationPrice = cartServiceInterface.calculateVariationPrice(cartModel, 0);
+      bool hasVariation = itemVariationPrice > 0;
 
-      _variationPrice += variationPrice;
-      _itemPrice = _itemPrice + price;
-      _itemDiscountPrice = _itemDiscountPrice + discountPrice + (variationPrice - variationWithoutDiscountPrice);
+      double itemVariationWithoutDiscount = 0;
+      if (hasVariation) {
+        basePrice = 0;
+        itemDiscountAmount = 0;
+        itemVariationWithoutDiscount = cartServiceInterface.calculateVariationWithoutDiscountPrice(cartModel, 0, discount, discountType);
+        _variationPrice += itemVariationPrice;
+        itemDiscountAmount += (itemVariationPrice - itemVariationWithoutDiscount);
+      }
 
-      debugPrint('==check : ${_cartList.indexOf(cartModel)} ====> $_itemDiscountPrice = $_itemDiscountPrice + $discountPrice + ($variationPrice - $variationWithoutDiscountPrice)');
+      _itemPrice += basePrice;
+      _itemDiscountPrice += itemDiscountAmount;
+
+      debugPrint('Item ${_cartList.indexOf(cartModel)} -> BasePrice: $basePrice, Discount: $itemDiscountAmount, VariationPrice: $itemVariationPrice');
     }
     _subTotal = (_itemPrice - _itemDiscountPrice) + _addOnsPrice + _variationPrice;
 
+
+    debugPrint("Cart Total: ${_itemPrice}, ${_itemDiscountPrice}, ${_addOnsPrice}, ${_variationPrice}, Total: ${ variationWithoutDiscountPrice + _addOnsPrice}");
     if (Get.find<RestaurantController>().restaurant != null && Get.find<RestaurantController>().restaurant!.discount != null) {
       if (Get.find<RestaurantController>().restaurant!.discount!.maxDiscount != 0 && Get.find<RestaurantController>().restaurant!.discount!.maxDiscount! < _itemDiscountPrice) {
         _itemDiscountPrice = Get.find<RestaurantController>().restaurant!.discount!.maxDiscount!;
@@ -274,6 +290,7 @@ class CartController extends GetxController implements GetxService {
     List<OnlineCartModel> onlineCartList = await cartServiceInterface.getCartDataOnline(AuthHelper.isLoggedIn() ? null : AuthHelper.getGuestId());
     _cartList = [];
     _cartList.addAll(cartServiceInterface.formatOnlineCartToLocalCart(onlineCartModel: onlineCartList));
+    debugPrint("item cart data ${_cartList}");
     calculationCart();
     _isLoading = false;
     update();

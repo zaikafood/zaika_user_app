@@ -1,0 +1,2 @@
+C:/Users/HARSHALI/Desktop/waris/zaika_user_app/android/app/.cxx/Debug/5a3r374d/x86/CMakeFiles/edit_cache.dir
+C:/Users/HARSHALI/Desktop/waris/zaika_user_app/android/app/.cxx/Debug/5a3r374d/x86/CMakeFiles/rebuild_cache.dir

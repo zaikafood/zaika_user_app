@@ -505,8 +505,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     double price = 0;
     double variationPrice = 0;
     for (var cartModel in cartList!) {
+      if(cartModel.product!.variations!.isEmpty){
+        price = price + (cartModel.price! * cartModel.quantity!);
 
-      price = price + (cartModel.product!.price! * cartModel.quantity!);
+      }
 
       for(int index = 0; index< cartModel.product!.variations!.length; index++) {
         for(int i=0; i<cartModel.product!.variations![index].variationValues!.length; i++) {
@@ -548,10 +550,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
         String? disType = (restaurant.discount != null
             && DateConverter.isAvailable(restaurant.discount!.startTime, restaurant.discount!.endTime))
             ? 'percent' : cartModel.product!.discountType;
+        // double d = ((cartModel.product!.price! - PriceConverter.convertWithDiscount(cartModel.product!.price!, dis, disType)!) * cartModel.quantity!);
 
-        double d = ((cartModel.product!.price! - PriceConverter.convertWithDiscount(cartModel.product!.price!, dis, disType)!) * cartModel.quantity!);
+        double d = ((cartModel.price! - PriceConverter.convertWithDiscount(cartModel.price!, dis, disType)!) * cartModel.quantity!);
         discount = discount! + d;
-        discount = discount + _calculateVariationPrice(restaurant: restaurant, cartModel: cartModel);
+        debugPrint("Discount $discount d: ${d}");
+       // discount = discount + _calculateVariationPrice(restaurant: restaurant, cartModel: cartModel);
+       //  debugPrint("Discount $discount d: ${d}");
 
 
       }
@@ -595,6 +600,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   double _calculateSubTotal(double price, double addOnsPrice) {
+    debugPrint("Price and addOnPrice ${price} and ${addOnsPrice}");
     double subTotal = price + addOnsPrice;
     return PriceConverter.toFixed(subTotal);
   }

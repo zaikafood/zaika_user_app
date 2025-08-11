@@ -137,7 +137,7 @@ class CartProductWidget extends StatelessWidget {
                                 Wrap(
                                   children: [
                                     Text(
-                                      PriceConverter.convertPrice(cart.product!.price, discount: discount, discountType: discountType),
+                                      PriceConverter.convertPrice(cart.price, discount: discount, discountType: discountType),
                                       style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall), textDirection: TextDirection.ltr,
                                     ),
                                     SizedBox(width: discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),

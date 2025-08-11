@@ -50,6 +50,10 @@ class _SignInViewState extends State<SignInView> {
         : CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).dialCode;
     _phoneController.text =  authController.getUserNumber();
     _passwordController.text = authController.getUserPassword();
+    if(kDebugMode){
+      _phoneController.text="9850763541";
+      _passwordController.text="Jaina@1962";
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_){
       bool isOtpActive = CentralizeLoginHelper.getPreferredLoginMethod(Get.find<SplashController>().configModel!.centralizeLoginSetup!, _isOtpViewEnable).type == CentralizeLoginType.otp

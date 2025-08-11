@@ -254,6 +254,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     ),
                                                     itemCount: cartController.cartList.length,
                                                     itemBuilder: (context, index) {
+                                                      // debugPrint("cart item length ${cartController.cartList[index].}");
                                                       return CartProductWidget(
                                                         cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index],
                                                         isAvailable: cartController.availableList[index], isRestaurantOpen: isRestaurantOpen,
@@ -383,17 +384,19 @@ class _CartScreenState extends State<CartScreen> {
                         child: Column(children: [
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('item_price'.tr, style: robotoRegular),
-                            PriceConverter.convertAnimationPrice(cartController.itemPrice, textStyle: robotoRegular),
-                          ]),
-                          SizedBox(height: cartController.variationPrice > 0 ? Dimensions.paddingSizeSmall : 0),
+                            PriceConverter.convertAnimationPrice(cartController.itemPrice+cartController.variationPrice, textStyle: robotoRegular),
 
-                          cartController.variationPrice > 0 ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('variations'.tr, style: robotoRegular),
-                              Text('(+) ${PriceConverter.convertPrice(cartController.variationPrice)}', style: robotoRegular, textDirection: TextDirection.ltr),
-                            ],
-                          ) : const SizedBox(),
+                            // PriceConverter.convertAnimationPrice(cartController.variationPrice, textStyle: robotoRegular),
+                          ]),
+                          // SizedBox(height: cartController.variationPrice > 0 ? Dimensions.paddingSizeSmall : 0),
+                          //
+                          // cartController.variationPrice > 0 ? Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('variations'.tr, style: robotoRegular),
+                          //     Text('(+) ${PriceConverter.convertPrice(cartController.variationPrice)}', style: robotoRegular, textDirection: TextDirection.ltr),
+                          //   ],
+                          // ) : const SizedBox(),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
 
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

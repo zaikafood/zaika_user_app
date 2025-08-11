@@ -230,7 +230,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               Positioned(
                                 bottom: 0, right: 0, top: 0, left: 0,
                                 child: InkWell(
-                                  onTap: () => profileController.pickImage(),
+                                  onTap: () =>  _showBottomBarCamera(context, profileController),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.black.withValues(alpha: 0.3), shape: BoxShape.circle,
@@ -326,7 +326,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       Positioned(
                         bottom: 0, right: 0, top: 0, left: 0,
                         child: InkWell(
-                          onTap: () => profileController.pickImage(),
+                          onTap: () => _showBottomBarCamera(context, profileController),
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.black.withValues(alpha: 0.3), shape: BoxShape.circle,
@@ -479,6 +479,38 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
     );
   }
+
+  Future<void> _showBottomBarCamera(BuildContext context, ProfileController profileController) async {
+    showModalBottomSheet(
+        barrierColor:  Colors.grey.withOpacity(0.5),
+        backgroundColor: Colors.transparent,
+        context: context, builder: (context) =>
+        SafeArea(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.camera_alt, size: 28, color: Theme.of(context).disabledColor),
+                  title: Text('Camera',style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7))),
+                  tileColor: Theme.of(context).cardColor,
+                  onTap: () {
+                    Get.back();
+                    profileController.pickImage(true);
+                  },
+                ),
+                ListTile(
+                    leading:  Icon(Icons.image_sharp, size: 28, color: Theme.of(context).disabledColor),
+                    title: Text('Gallery',style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7))),
+                    tileColor: Theme.of(context).cardColor,
+                    onTap: () {
+                      Get.back();
+                      profileController.pickImage(false);
+                    }
+                )
+              ],
+            )
+        ));
+  }
+
 
   Future<void> _updateProfile({required ProfileController profileController, required bool fromButton, required bool fromPhone}) async {
     String name = _nameController.text.trim();
