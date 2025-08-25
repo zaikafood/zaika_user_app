@@ -214,10 +214,16 @@ class OrderPlaceButton extends StatelessWidget {
         );
       }
       return true;
-    }else if(orderAmount < checkoutController.restaurant!.minimumOrder!) {
-      showCustomSnackBar('${'minimum_order_amount_is'.tr} ${checkoutController.restaurant!.minimumOrder}');
+    }else if(orderAmount < 100) {
+      showCustomSnackBar('${'minimum_order_amount_is'.tr} ₹100');
       return true;
-    }else if(checkoutController.subscriptionOrder && checkoutController.subscriptionRange == null) {
+    }
+    // else if(orderAmount < checkoutController.restaurant!.minimumOrder!) {
+    //   showCustomSnackBar('${'minimum_order_amount_is'.tr} ${checkoutController.restaurant!.minimumOrder}');
+    //   return true;
+    // }
+    else if(checkoutController.subscriptionOrder && checkoutController.subscriptionRange == null) {
+
       showCustomSnackBar('select_a_date_range_for_subscription'.tr);
       return true;
     }else if(checkoutController.subscriptionOrder && !datePicked && checkoutController.subscriptionType == 'daily') {

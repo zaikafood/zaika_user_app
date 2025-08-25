@@ -270,7 +270,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
               double referralDiscount = _calculateReferralDiscount(subTotal, discount, couponDiscount, checkoutController.subscriptionOrder);
 
-              double orderAmount = _calculateOrderAmount(price, addOnsPrice, discount, couponDiscount, referralDiscount);
+              // double orderAmount = _calculateOrderAmount(price, addOnsPrice, discount, couponDiscount, referralDiscount);
+              double orderAmount = _calculateOrderAmount(price, addOnsPrice, 0, couponDiscount, referralDiscount);
 
               bool taxIncluded = Get.find<SplashController>().configModel!.taxIncluded == 1;
               double tax = _calculateTax(taxIncluded, orderAmount, taxPercent);
@@ -292,10 +293,9 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               }
 
               deliveryCharge = PriceConverter.toFixed(deliveryCharge);
-
               double extraPackagingCharge = _calculateExtraPackagingCharge(checkoutController);
-
-              double total = _calculateTotal(subTotal, deliveryCharge, discount, couponDiscount, taxIncluded, tax, showTips, checkoutController.tips, additionalCharge, extraPackagingCharge);
+              // double total = _calculateTotal(subTotal, deliveryCharge, 0, couponDiscount, taxIncluded, tax, showTips, checkoutController.tips, additionalCharge, extraPackagingCharge);
+               double total = _calculateTotal(subTotal, deliveryCharge, discount, couponDiscount, taxIncluded, tax, showTips, checkoutController.tips, additionalCharge, extraPackagingCharge);
 
               total = total - referralDiscount;
 
@@ -509,7 +509,6 @@ class CheckoutScreenState extends State<CheckoutScreen> {
         price = price + (cartModel.price! * cartModel.quantity!);
 
       }
-
       for(int index = 0; index< cartModel.product!.variations!.length; index++) {
         for(int i=0; i<cartModel.product!.variations![index].variationValues!.length; i++) {
           if(cartModel.variations![index][i]!) {
@@ -614,7 +613,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     double tax = 0;
     if(taxIncluded){
       tax = orderAmount * taxPercent! /(100 + taxPercent);
-    }else {
+    }else if(taxPercent ==0) {
+      tax = PriceConverter.calculation(orderAmount, 5, 'percent', 1);
+    }
+    else {
       tax = PriceConverter.calculation(orderAmount, taxPercent, 'percent', 1);
     }
     return PriceConverter.toFixed(tax);

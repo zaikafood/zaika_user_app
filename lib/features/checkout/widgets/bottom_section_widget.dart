@@ -195,8 +195,10 @@ class BottomSectionWidget extends StatelessWidget {
               SizedBox(height: !isDesktop ? Dimensions.paddingSizeSmall : 0),
 
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(!checkoutController.subscriptionOrder ? 'subtotal'.tr : 'item_price'.tr, style: robotoRegular),
+                // Text(!checkoutController.subscriptionOrder ? 'subtotal'.tr : 'item_price'.tr, style: robotoRegular),
+                Text('item price', style: robotoRegular),
                 Text(PriceConverter.convertPrice(subTotal), style: robotoRegular, textDirection: TextDirection.ltr),
+
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
 

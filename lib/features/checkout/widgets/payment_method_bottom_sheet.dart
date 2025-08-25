@@ -129,7 +129,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                               // SizedBox(height: !widget.isSubscriptionPackage && notHideCod ? Dimensions.paddingSizeExtraSmall : 0),
 
                               !widget.isSubscriptionPackage && notHideCod ? Text(
-                                ' click_one_of_the_option_below'.tr,
+                                'click one of the option below',
                                 style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor),
                               ) : const SizedBox(),
                             ],

@@ -481,7 +481,7 @@ class _DeliverymanRegistrationWebScreenState extends State<DeliverymanRegistrati
                             Expanded(
                               child: CustomTextFieldWidget(
                                 hintText: widget.deliverymanController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X'
-                                    : widget.deliverymanController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
+                                    : 'L-XXX-XXX-XXX-XXX.',
                                 controller: widget.identityNumberController,
                                 focusNode: widget.identityNumberNode,
                                 inputAction: TextInputAction.done,
