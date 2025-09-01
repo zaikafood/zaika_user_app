@@ -33,7 +33,7 @@ class PaymentMethodBottomSheet extends StatefulWidget {
 
 class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
   bool canSelectWallet = true;
-  bool notHideCod = true;
+  bool notHideCod = false;
   bool notHideWallet = true;
   bool notHideDigital = true;
   final JustTheController tooltipController = JustTheController();

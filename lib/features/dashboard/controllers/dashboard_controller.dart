@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:zaika/features/address/domain/models/address_model.dart';
 import 'package:zaika/features/checkout/controllers/checkout_controller.dart';
 import 'package:zaika/features/dashboard/domain/services/dashboard_service_interface.dart';
@@ -8,16 +10,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../api/api_client.dart';
+
 class DashboardController extends GetxController implements GetxService {
+
   final DashboardServiceInterface dashboardServiceInterface;
   DashboardController({required this.dashboardServiceInterface});
 
   bool _showLocationSuggestion = true;
   bool get showLocationSuggestion => _showLocationSuggestion;
 
+
   void hideSuggestedLocation(){
     _showLocationSuggestion = !_showLocationSuggestion;
   }
+
 
   Future<bool> checkLocationActive() async {
     bool isActiveLocation = await Geolocator.isLocationServiceEnabled();

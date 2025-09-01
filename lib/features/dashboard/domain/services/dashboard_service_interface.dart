@@ -5,4 +5,5 @@ abstract class DashboardServiceInterface{
   Future<bool> saveIsRestaurantRegistration(bool status);
   bool getRegistrationSuccessful();
   bool getIsRestaurantRegistration();
+
 }

@@ -274,7 +274,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
               double orderAmount = _calculateOrderAmount(price, addOnsPrice, 0, couponDiscount, referralDiscount);
 
               bool taxIncluded = Get.find<SplashController>().configModel!.taxIncluded == 1;
-              double tax = _calculateTax(taxIncluded, orderAmount, taxPercent);
+              // double tax = _calculateTax(taxIncluded, orderAmount, taxPercent);
+              double tax = _calculateTax(taxIncluded, orderAmount-discount, taxPercent);
               bool restaurantSubscriptionActive = false;
               int subscriptionQty = checkoutController.subscriptionOrder ? 0 : 1;
               double additionalCharge =  Get.find<SplashController>().configModel!.additionalChargeStatus! ? Get.find<SplashController>().configModel!.additionCharge! : 0;

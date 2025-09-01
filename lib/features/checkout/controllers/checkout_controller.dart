@@ -322,7 +322,7 @@ class CheckoutController extends GetxController implements GetxService {
   }
 
   void setPreferenceTimeForView(String time, bool instanceOrder, {bool isUpdate = true}){
-    _preferableTime = checkoutServiceInterface.setPreferenceTimeForView(time, instanceOrder);
+    _preferableTime = "2025-09-04 00:00:00.000";// checkoutServiceInterface.setPreferenceTimeForView(time, instanceOrder);
     if(isUpdate) {
       update();
     }
