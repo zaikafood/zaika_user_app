@@ -168,8 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GetBuilder<HomeController>(builder: (homeController) {
       return GetBuilder<LocalizationController>(builder: (localizationController) {
-        return FloatingDraggableWidget(
-          mainScreenWidget: Scaffold(
+        return SizedBox(
+
+          child: Scaffold(
             appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : null,
             endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -435,25 +436,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
           ),
-            floatingWidget: homeController.stockModel==null  ?SizedBox():  homeController.stockModel!.stock==0?SizedBox(): FloatingActionButton(
-
-              backgroundColor:Theme.of(context).primaryColor ,
-              onPressed: (){},
-              tooltip: 'Remaining Stock',
-              child:Container(child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Text("Remaining Stock"),
-                  Text("${homeController.stockModel!.stock??0}"),
-                ],
-              )),
-
-            ),
-            floatingWidgetHeight: 40,
-            floatingWidgetWidth: 40,
-            dx: 200,
-            dy: 300
-
+        //     floatingWidget: homeController.stockModel==null  ?SizedBox():  homeController.stockModel!.stock==0?SizedBox(): FloatingActionButton(
+        //
+        //       backgroundColor:Theme.of(context).primaryColor ,
+        //       onPressed: (){},
+        //       tooltip: 'Remaining Stock',
+        //       child:Container(child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           // Text("Remaining Stock"),
+        //           Text("${homeController.stockModel!.stock??0}"),
+        //         ],
+        //       )),
+        //
+        //     ),
+        //     floatingWidgetHeight: 40,
+        //     floatingWidgetWidth: 40,
+        //     dx: 200,
+        //     dy: 300
+        //
         );
       });
     });

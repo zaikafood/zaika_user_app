@@ -50,7 +50,7 @@ android {
         applicationId "com.zaika.user"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 13
+        versionCode 14
         versionName flutterVersionName
         multiDexEnabled true
     }
