@@ -1,4 +1,5 @@
 import 'package:zaika/common/enums/data_source_enum.dart';
+import 'package:zaika/features/dashboard/model/StockCount.dart';
 import 'package:zaika/features/home/domain/models/banner_model.dart';
 import 'package:zaika/features/home/domain/models/cashback_model.dart';
 import 'package:zaika/features/home/domain/repositories/home_repository_interface.dart';
@@ -11,6 +12,11 @@ class HomeService implements HomeServiceInterface {
   @override
   Future<BannerModel?> getBannerList({required DataSourceEnum source}) async {
     return await homeRepositoryInterface.getList(source: source);
+  }
+
+  @override
+  Future<StockModel> getStock() async {
+    return await homeRepositoryInterface.getStock();
   }
 
   @override

@@ -1,8 +1,11 @@
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zaika/features/dashboard/domain/repositories/dashboard_repo_interface.dart';
+import 'package:zaika/features/dashboard/model/StockCount.dart';
 import 'package:zaika/util/app_constants.dart';
 
 class DashboardRepo implements DashboardRepoInterface{
+
   final SharedPreferences sharedPreferences;
   DashboardRepo({required this.sharedPreferences});
 
@@ -10,6 +13,7 @@ class DashboardRepo implements DashboardRepoInterface{
   Future<bool> saveRegistrationSuccessful(bool status) async {
     return await sharedPreferences.setBool(AppConstants.dmRegisterSuccess, status);
   }
+
 
   @override
   Future<bool> saveIsRestaurantRegistration(bool status) async {

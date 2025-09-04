@@ -8,6 +8,8 @@ import 'package:zaika/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+
+import '../../../helper/date_converter.dart';
 class TimeSlotSection extends StatelessWidget {
   final bool fromCart;
   final CheckoutController checkoutController;
@@ -88,7 +90,7 @@ class TimeSlotSection extends StatelessWidget {
                     return Expanded(child: Text(
                       (checkoutController.selectedDateSlot == 0 && todayClosed) || (checkoutController.selectedDateSlot == 1 && tomorrowClosed) || (checkoutController.selectedDateSlot == 2 && checkoutController.customDateRestaurantClose)
                           ? 'restaurant_is_closed'.tr
-                          : checkoutController.preferableTime.isNotEmpty ? checkoutController.preferableTime
+                          : checkoutController.preferableTime.isNotEmpty ? DateConverter.dateTimeStringToDateOnly(checkoutController.preferableTime)
                           : (Get.find<SplashController>().configModel!.instantOrder! && checkoutController.restaurant!.instantOrder!) ? 'now'.tr : 'select_preference_time'.tr,
                       style: robotoRegular.copyWith(
                           color: (checkoutController.selectedDateSlot == 0 && todayClosed) || (checkoutController.selectedDateSlot == 1 && tomorrowClosed) || (checkoutController.selectedDateSlot == 2 && checkoutController.customDateRestaurantClose)

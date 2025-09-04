@@ -156,7 +156,7 @@ class NotificationHelper {
     AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'stackfood', 'stackfood', importance: Importance.max,
       styleInformation: bigTextStyleInformation, priority: Priority.max, playSound: true,
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      sound:   RawResourceAndroidNotificationSound('notification'),
     );
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await fln.show(DateTime.now().millisecondsSinceEpoch % 100000, title, body, platformChannelSpecifics, payload: notificationBody != null ? jsonEncode(notificationBody.toJson()) : null);
@@ -176,7 +176,7 @@ class NotificationHelper {
       'stackfood', 'stackfood',
       largeIcon: FilePathAndroidBitmap(largeIconPath), priority: Priority.max, playSound: true,
       styleInformation: bigPictureStyleInformation, importance: Importance.max,
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      sound:   RawResourceAndroidNotificationSound('notification'),
     );
     final NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await fln.show(DateTime.now().millisecondsSinceEpoch % 100000, title, body, platformChannelSpecifics, payload: notificationBody != null ? jsonEncode(notificationBody.toJson()) : null);

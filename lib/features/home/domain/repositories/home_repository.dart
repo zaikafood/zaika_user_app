@@ -8,6 +8,8 @@ import 'package:zaika/features/home/domain/repositories/home_repository_interfac
 import 'package:zaika/util/app_constants.dart';
 import 'package:get/get_connect.dart';
 
+import '../../../dashboard/model/StockCount.dart';
+
 class HomeRepository implements HomeRepositoryInterface {
   final ApiClient apiClient;
   HomeRepository({required this.apiClient});
@@ -16,7 +18,15 @@ class HomeRepository implements HomeRepositoryInterface {
   Future<BannerModel?> getList({int? offset, DataSourceEnum? source}) async {
     return await _getBannerList(source: source!);
   }
-
+  @override
+  Future<StockModel> getStock() async {
+    StockModel? stockModel;
+    Response response = await apiClient.getData('${AppConstants.getStocks}');
+    if(response.statusCode == 200) {
+      stockModel=StockModel.fromJson(response.body);
+    }
+    return stockModel??StockModel(count: 0, stock: 0);
+  }
   Future<BannerModel?> _getBannerList({required DataSourceEnum source}) async {
     BannerModel? bannerModel;
     String cacheId = AppConstants.bannerUri;

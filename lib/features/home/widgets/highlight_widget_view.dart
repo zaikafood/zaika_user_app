@@ -37,14 +37,14 @@ class _HighlightWidgetViewState extends State<HighlightWidgetView> {
   Widget build(BuildContext context) {
     return GetBuilder<AdvertisementController>(builder: (advertisementController) {
       return advertisementController.advertisementList != null && advertisementController.advertisementList!.isNotEmpty ? Padding(
-        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, bottom: Dimensions.paddingSizeDefault),
+        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, bottom:Dimensions.paddingSizeDefault),
         child: Stack(
           children: [
 
-            // CustomAssetImageWidget(
-            //   Images.highlightBg, width: context.width,
-            //   fit: BoxFit.cover,
-            // ),
+            CustomAssetImageWidget(
+              Images.highlightBg, width: context.width,
+              fit: BoxFit.cover,
+            ),
 
             Column(children: [
 
@@ -71,40 +71,40 @@ class _HighlightWidgetViewState extends State<HighlightWidgetView> {
                 ]),
               ),
 
-              // CarouselSlider.builder(
-              //   carouselController: _carouselController,
-              //   itemCount: advertisementController.advertisementList!.length,
-              //   options: CarouselOptions(
-              //     enableInfiniteScroll: advertisementController.advertisementList!.length > 2,
-              //     autoPlay: advertisementController.autoPlay,
-              //     enlargeCenterPage: false,
-              //     height: 280,
-              //     viewportFraction: 1,
-              //     disableCenter: true,
-              //     onPageChanged: (index, reason) {
-              //
-              //       advertisementController.setCurrentIndex(index, true);
-              //
-              //       if(advertisementController.advertisementList?[index].addType == "video_promotion"){
-              //         advertisementController.updateAutoPlayStatus(status: false);
-              //       }else{
-              //         advertisementController.updateAutoPlayStatus(status: true);
-              //       }
-              //
-              //     },
-              //   ),
-              //   itemBuilder: (context, index, realIndex) {
-              //     return advertisementController.advertisementList?[index].addType == 'video_promotion' ? HighlightVideoWidget(
-              //       advertisement: advertisementController.advertisementList![index],
-              //     ) : HighlightRestaurantWidget(advertisement: advertisementController.advertisementList![index]);
-              //   },
-              // ),
+              CarouselSlider.builder(
+                carouselController: _carouselController,
+                itemCount: advertisementController.advertisementList!.length,
+                options: CarouselOptions(
+                  enableInfiniteScroll: advertisementController.advertisementList!.length > 2,
+                  autoPlay: advertisementController.autoPlay,
+                  enlargeCenterPage: false,
+                  height: 290,
+                  viewportFraction: 1,
+                  disableCenter: true,
+                  onPageChanged: (index, reason) {
 
-               const BannerViewWidget(),
+                    advertisementController.setCurrentIndex(index, true);
 
-              // const AdvertisementIndicator(),
+                    if(advertisementController.advertisementList?[index].addType == "video_promotion"){
+                      advertisementController.updateAutoPlayStatus(status: false);
+                    }else{
+                      advertisementController.updateAutoPlayStatus(status: true);
+                    }
 
-              const SizedBox(height: Dimensions.paddingSizeExtraSmall,),
+                  },
+                ),
+                itemBuilder: (context, index, realIndex) {
+                  return advertisementController.advertisementList?[index].addType == 'video_promotion' ? HighlightVideoWidget(
+                    advertisement: advertisementController.advertisementList![index],
+                  ) : HighlightRestaurantWidget(advertisement: advertisementController.advertisementList![index]);
+                },
+              ),
+
+               // const BannerViewWidget(),
+
+              const AdvertisementIndicator(),
+
+              // const SizedBox(height: Dimensions.paddingSizeExtraSmall,),
 
             ]),
           ],
@@ -122,7 +122,7 @@ class HighlightRestaurantWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      height: 280,
+      height: 290,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
         color: Theme.of(context).cardColor,

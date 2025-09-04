@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:zaika/common/enums/data_source_enum.dart';
+import 'package:zaika/features/dashboard/model/StockCount.dart';
 import 'package:zaika/features/home/domain/models/banner_model.dart';
 import 'package:zaika/features/home/domain/models/cashback_model.dart';
 import 'package:zaika/features/home/domain/services/home_service_interface.dart';
@@ -27,6 +30,20 @@ class HomeController extends GetxController implements GetxService {
 
   bool _showFavButton = true;
   bool get showFavButton => _showFavButton;
+  StockModel? _stockModel;
+  StockModel? get stockModel=>_stockModel;
+  Timer? _timer;
+  void getStock(){
+
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer)async {
+      _stockModel = await homeServiceInterface.getStock();
+  update();
+    });
+  }
+  void cancelTimer() {
+    _timer?.cancel();
+  }
 
   Future<void> getBannerList(bool reload, {DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
     if(_bannerImageList == null || reload || fromRecall) {

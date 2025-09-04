@@ -33,7 +33,7 @@ class PaymentMethodBottomSheet extends StatefulWidget {
 
 class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
   bool canSelectWallet = true;
-  bool notHideCod = true;
+  bool notHideCod = false;
   bool notHideWallet = true;
   bool notHideDigital = true;
   final JustTheController tooltipController = JustTheController();
@@ -129,7 +129,7 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                               // SizedBox(height: !widget.isSubscriptionPackage && notHideCod ? Dimensions.paddingSizeExtraSmall : 0),
 
                               !widget.isSubscriptionPackage && notHideCod ? Text(
-                                ' click_one_of_the_option_below'.tr,
+                                'click one of the option below',
                                 style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor),
                               ) : const SizedBox(),
                             ],

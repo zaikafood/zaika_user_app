@@ -155,11 +155,13 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
                               DateTime selectedDate = DateConverter.dateTimeStringToDate(args.value.toString());
                               setState(() {
                                 selectCustomDate = selectedDate;
+                                debugPrint("Selected date ${selectedDate}");
                               });
                               initializeTimeSlots(false);
                             },
                             showNavigationArrow: true,
                             selectableDayPredicate: (DateTime val) {
+                              // return true;
                               return _canSelectDate(duration: isRestaurantSelfDeliveryOn ? widget.restaurant.customerOrderDate! : Get.find<SplashController>().configModel!.customerOrderDate!, value: val);
                             }
                         ),
@@ -282,22 +284,35 @@ class _TimeSlotBottomSheetState extends State<TimeSlotBottomSheet> {
     );
   }
 
+  // bool _canSelectDate({required int duration, required DateTime value}) {
+  //   List<DateMonthBodyModel> date = [];
+  //   for(int i=0; i<duration; i++){
+  //     date.add(DateMonthBodyModel(date: DateTime.now().add(Duration(days: i)).day, month: DateTime.now().add(Duration(days: i)).month));
+  //   }
+  //   bool status = false;
+  //   for(int i=0; i<date.length; i++){
+  //     if(date[i].month == value.month && date[i].date == value.day){
+  //       status = true;
+  //       break;
+  //     } else {
+  //       status = false;
+  //     }
+  //   }
+  //   return status;
+  // }
   bool _canSelectDate({required int duration, required DateTime value}) {
-    List<DateMonthBodyModel> date = [];
-    for(int i=0; i<duration; i++){
-      date.add(DateMonthBodyModel(date: DateTime.now().add(Duration(days: i)).day, month: DateTime.now().add(Duration(days: i)).month));
-    }
-    bool status = false;
-    for(int i=0; i<date.length; i++){
-      if(date[i].month == value.month && date[i].date == value.day){
-        status = true;
-        break;
-      } else {
-        status = false;
-      }
-    }
-    return status;
+    DateTime today = DateTime.now();
+    DateTime lastDate = today.add(Duration(days: duration));
+
+    // ✅ Only allow dates from today → today+duration
+    return value.isAfter(today.subtract(const Duration(days: 1))) &&
+        value.isBefore(lastDate.add(const Duration(days: 1)));
   }
+
+  // void initializeTimeSlots(bool fromInit) {
+  //   // yaha apna slots ka logic likho
+  //   debugPrint("Initialize time slots with date: $selectCustomDate");
+  // }
 
   String _createCustomTime(int index) {
     String time = (index == 0 && selectedDateSlotIndex == 2
