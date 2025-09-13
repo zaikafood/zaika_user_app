@@ -30,6 +30,18 @@ android {
     namespace = "com.zaika.user"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+    flavorDimensions.add("default")
+    productFlavors {
+        create("staging") {
+            dimension = "default"
+            applicationIdSuffix = ".staging"
+            resValue("string", "app_name", "Zaika Staging")
+        }
+        create("production") {
+            dimension = "default"
+            resValue("string", "app_name", "Zaika")
+        }
+    }
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
