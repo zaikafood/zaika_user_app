@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 class AppConstants {
   static const String appName = 'Zaika';
   static const double appVersion = 8.0;
-
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
   static const String webHostedUrl = 'https://zaika.ltd';

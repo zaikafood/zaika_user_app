@@ -43,10 +43,11 @@ Future<void> main() async {
   } else if (GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'YOUR_PRODUCTION_API_KEY',
-        appId: 'YOUR_PRODUCTION_APP_ID',
-        messagingSenderId: 'YOUR_PRODUCTION_SENDER_ID',
-        projectId: 'YOUR_PRODUCTION_PROJECT_ID',
+        apiKey: 'AIzaSyAGJenQNd-KCVh4vaL4u8D0gRXfCQKYW2o', // Staging Key
+        appId:
+            '1:533169250177:android:b66d74b7c61006585ed280', // Staging App ID
+        messagingSenderId: '533169250177', // Staging Sender ID
+        projectId: 'zaika-19c9b', // Staging Project ID
       ),
     );
   } else {
@@ -76,7 +77,8 @@ Future<void> main() async {
       version: "v13.0",
     );
   }
-  runApp(MyApp(languages: languages, body: body, linkBody: linkBody));
+  runApp(MyApp(
+      languages: languages, body: body, linkBody: linkBody, staging: true));
 }
 
 class MyHttpOverrides extends HttpOverrides {

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zaika/features/auth/controllers/auth_controller.dart';
@@ -21,11 +22,13 @@ class MyApp extends StatefulWidget {
   final Map<String, Map<String, String>>? languages;
   final NotificationBodyModel? body;
   final DeepLinkBody? linkBody;
+  final bool staging;
   const MyApp(
       {super.key,
       required this.languages,
       required this.body,
-      required this.linkBody});
+      required this.linkBody,
+      this.staging = false});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -35,7 +38,19 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    getFcmToken();
     _route();
+  }
+
+  Future<void> getFcmToken() async {
+    String? _token;
+    await FirebaseMessaging.instance.requestPermission();
+
+    String? token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      _token = token;
+    });
+    print("FCM Token: $_token");
   }
 
   Future<void> _route() async {
@@ -66,7 +81,7 @@ class _MyAppState extends State<MyApp> {
               ? const SizedBox()
               : GetMaterialApp(
                   title: AppConstants.appName,
-                  debugShowCheckedModeBanner: false,
+                  debugShowCheckedModeBanner: widget.staging ? true : false,
                   navigatorKey: Get.key,
                   scrollBehavior: const MaterialScrollBehavior().copyWith(
                     dragDevices: {
