@@ -14,6 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'config/app_config.dart';
 import 'helper/get_di.dart' as di;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -23,12 +24,14 @@ Future<void> main() async {
   if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = MyHttpOverrides();
   }
+  AppConfig.init(Environment.STAGING);
+  // AppConstants.baseUrl =
+  //     'https://zaika.ltd'; // Yahan apna production URL daalein
+
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
 
   // Production Base URL
-  AppConstants.baseUrl =
-      'https://zaika.ltd'; // Yahan apna production URL daalein
 
   DeepLinkBody? linkBody;
 
@@ -36,8 +39,9 @@ Future<void> main() async {
   if (GetPlatform.isWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
-      apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA', // Staging Key
-      appId: '1:491987943015:android:fe79b69339834d5c8f1ec2', // Staging App ID
+      apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA', // production Key
+      appId:
+          '1:491987943015:android:fe79b69339834d5c8f1ec2', // production App ID
       messagingSenderId: '491987943015', // Staging Sender ID
       projectId: 'stackmart-500c7', // Staging Project ID
     ));
@@ -47,7 +51,7 @@ Future<void> main() async {
       options: const FirebaseOptions(
         apiKey: 'AIzaSyAGJenQNd-KCVh4vaL4u8D0gRXfCQKYW2o', // Staging Key
         appId:
-            '1:533169250177:android:b66d74b7c61006585ed280', // Staging App ID
+            '1:533169250177:android:a9e802cdc0afe6635ed280', // Staging App ID
         messagingSenderId: '533169250177', // Staging Sender ID
         projectId: 'zaika-19c9b', // Staging Project ID
       ),

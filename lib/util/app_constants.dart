@@ -1,3 +1,4 @@
+import 'package:zaika/config/app_config.dart';
 import 'package:zaika/features/language/domain/models/language_model.dart';
 import 'package:zaika/util/images.dart';
 import 'package:get/get.dart';
@@ -7,10 +8,11 @@ class AppConstants {
   static const double appVersion = 8.0;
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
-  static const String webHostedUrl = 'https://zaika.ltd';
+  static const String webHostedUrl = '';
   static const bool useReactWebsite = false;
 //https://zaika.ltd/api/v1/zone/list
-  static String baseUrl = 'https://zaika.ltd';
+  static String get baseUrl => AppConfig.instance.baseUrl;
+  // static String baseUrl = 'https://zaika.ltd';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String restaurantProductUri = '/api/v1/products/latest';

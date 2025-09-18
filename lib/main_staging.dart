@@ -14,6 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:meta_seo/meta_seo.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'config/app_config.dart';
 import 'helper/get_di.dart' as di;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -23,11 +24,12 @@ Future<void> main() async {
   if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = MyHttpOverrides();
   }
+  AppConfig.init(Environment.STAGING);
+  // AppConstants.baseUrl = 'https://staging.zaika.ltd';
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
 
   // Staging Base URL
-  AppConstants.baseUrl = 'https://staging.zaika.ltd';
 
   DeepLinkBody? linkBody;
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:zaika/api/api_client.dart';
 import 'package:zaika/api/local_client.dart';
 import 'package:zaika/common/enums/data_source_enum.dart';
@@ -18,30 +19,35 @@ class HomeRepository implements HomeRepositoryInterface {
   Future<BannerModel?> getList({int? offset, DataSourceEnum? source}) async {
     return await _getBannerList(source: source!);
   }
+
   @override
   Future<StockModel> getStock() async {
     StockModel? stockModel;
+    // debugPrint(AppConstants.getStocks);
     Response response = await apiClient.getData('${AppConstants.getStocks}');
-    if(response.statusCode == 200) {
-      stockModel=StockModel.fromJson(response.body);
+    if (response.statusCode == 200) {
+      stockModel = StockModel.fromJson(response.body);
     }
-    return stockModel??StockModel(count: 0, stock: 0);
+    return stockModel ?? StockModel(count: 0, stock: 0);
   }
+
   Future<BannerModel?> _getBannerList({required DataSourceEnum source}) async {
     BannerModel? bannerModel;
     String cacheId = AppConstants.bannerUri;
 
-    switch(source) {
+    switch (source) {
       case DataSourceEnum.client:
         Response response = await apiClient.getData(AppConstants.bannerUri);
-        if(response.statusCode == 200) {
+        if (response.statusCode == 200) {
           bannerModel = BannerModel.fromJson(response.body);
-          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+          LocalClient.organize(DataSourceEnum.client, cacheId,
+              jsonEncode(response.body), apiClient.getHeader());
         }
 
       case DataSourceEnum.local:
-        String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        if(cacheResponseData != null) {
+        String? cacheResponseData = await LocalClient.organize(
+            DataSourceEnum.local, cacheId, null, null);
+        if (cacheResponseData != null) {
           bannerModel = BannerModel.fromJson(jsonDecode(cacheResponseData));
         }
     }
@@ -50,24 +56,28 @@ class HomeRepository implements HomeRepositoryInterface {
   }
 
   @override
-  Future<List<CashBackModel>?> getCashBackOfferList({DataSourceEnum? source}) async {
+  Future<List<CashBackModel>?> getCashBackOfferList(
+      {DataSourceEnum? source}) async {
     List<CashBackModel>? cashBackModelList;
     String cacheId = AppConstants.cashBackOfferListUri;
 
-    switch(source!) {
+    switch (source!) {
       case DataSourceEnum.client:
-        Response response = await apiClient.getData(AppConstants.cashBackOfferListUri);
-        if(response.statusCode == 200) {
+        Response response =
+            await apiClient.getData(AppConstants.cashBackOfferListUri);
+        if (response.statusCode == 200) {
           cashBackModelList = [];
           response.body.forEach((data) {
             cashBackModelList!.add(CashBackModel.fromJson(data));
           });
-          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+          LocalClient.organize(DataSourceEnum.client, cacheId,
+              jsonEncode(response.body), apiClient.getHeader());
         }
 
       case DataSourceEnum.local:
-        String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        if(cacheResponseData != null) {
+        String? cacheResponseData = await LocalClient.organize(
+            DataSourceEnum.local, cacheId, null, null);
+        if (cacheResponseData != null) {
           cashBackModelList = [];
           jsonDecode(cacheResponseData).forEach((data) {
             cashBackModelList!.add(CashBackModel.fromJson(data));
@@ -80,8 +90,9 @@ class HomeRepository implements HomeRepositoryInterface {
   @override
   Future<CashBackModel?> getCashBackData(double amount) async {
     CashBackModel? cashBackModel;
-    Response response = await apiClient.getData('${AppConstants.getCashBackAmountUri}?amount=$amount');
-    if(response.statusCode == 200) {
+    Response response = await apiClient
+        .getData('${AppConstants.getCashBackAmountUri}?amount=$amount');
+    if (response.statusCode == 200) {
       cashBackModel = CashBackModel.fromJson(response.body);
     }
     return cashBackModel;
@@ -106,6 +117,4 @@ class HomeRepository implements HomeRepositoryInterface {
   Future update(Map<String, dynamic> body, int? id) {
     throw UnimplementedError();
   }
-
-  
 }

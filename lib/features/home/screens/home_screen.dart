@@ -61,7 +61,7 @@ class HomeScreen extends StatefulWidget {
 
   static Future<void> loadData(bool reload) async {
     Get.find<HomeController>().getBannerList(reload);
-    Get.find<HomeController>().getStock();
+    // Get.find<HomeController>().getStock();
     Get.find<CategoryController>().getCategoryList(reload);
     Get.find<CuisineController>().getCuisineList();
     Get.find<AdvertisementController>().getAdvertisementList();
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
               top: (Get.find<SplashController>().configModel!.theme == 2),
               child: RefreshIndicator(
                 onRefresh: () async {
-                  Get.find<HomeController>().getStock();
+                  // Get.find<HomeController>().getStock();
 
                   await Get.find<HomeController>().getBannerList(true);
                   await Get.find<CategoryController>().getCategoryList(true);
