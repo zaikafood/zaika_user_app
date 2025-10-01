@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:zaika/features/auth/controllers/auth_controller.dart';
 import 'package:zaika/features/cart/controllers/cart_controller.dart';
 import 'package:zaika/features/favourite/controllers/favourite_controller.dart';
@@ -79,53 +80,69 @@ class _MyAppState extends State<MyApp> {
         return GetBuilder<SplashController>(builder: (splashController) {
           return (GetPlatform.isWeb && splashController.configModel == null)
               ? const SizedBox()
-              : GetMaterialApp(
-                  title: AppConstants.appName,
-                  debugShowCheckedModeBanner: widget.staging ? true : false,
-                  navigatorKey: Get.key,
-                  scrollBehavior: const MaterialScrollBehavior().copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.mouse,
-                      PointerDeviceKind.touch
-                    },
+              : UpgradeAlert(
+                  showIgnore: false,
+                  showLater: false,
+                  shouldPopScope: () => false,
+                  upgrader: Upgrader(
+                    // debugDisplayAlways: true,
+                    minAppVersion: "1.0.9",
+                    // willDisplayUpgrade: (
+                    //         {required display,
+                    //         installedVersion = "1.0.8",
+                    //         versionInfo}) =>
+                    //     true,
+                    // durationUntilAlertAgain: const Duration(minutes: 2),
                   ),
-                  theme: themeController.darkTheme ? dark : light,
-                  locale: localizeController.locale,
-                  translations: Messages(languages: widget.languages),
-                  fallbackLocale: Locale(
-                      AppConstants.languages[0].languageCode!,
-                      AppConstants.languages[0].countryCode),
-                  initialRoute: GetPlatform.isWeb
-                      ? RouteHelper.getInitialRoute()
-                      : RouteHelper.getSplashRoute(
-                          widget.body, widget.linkBody),
-                  getPages: RouteHelper.routes,
-                  defaultTransition: Transition.topLevel,
-                  transitionDuration: const Duration(milliseconds: 500),
-                  builder: (BuildContext context, widget) {
-                    return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaler: const TextScaler.linear(1)),
-                        child: Material(
-                            child: Stack(children: [
-                          widget!,
-                          GetBuilder<SplashController>(
-                              builder: (splashController) {
-                            if (!splashController.savedCookiesData ||
-                                !splashController.getAcceptCookiesStatus(
-                                    splashController.configModel?.cookiesText ??
-                                        "")) {
-                              return ResponsiveHelper.isWeb()
-                                  ? const Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: CookiesViewWidget())
-                                  : const SizedBox();
-                            } else {
-                              return const SizedBox();
-                            }
-                          })
-                        ])));
-                  });
+                  child: GetMaterialApp(
+                      title: AppConstants.appName,
+                      debugShowCheckedModeBanner: widget.staging ? true : false,
+                      navigatorKey: Get.key,
+                      scrollBehavior: const MaterialScrollBehavior().copyWith(
+                        dragDevices: {
+                          PointerDeviceKind.mouse,
+                          PointerDeviceKind.touch
+                        },
+                      ),
+                      theme: themeController.darkTheme ? dark : light,
+                      locale: localizeController.locale,
+                      translations: Messages(languages: widget.languages),
+                      fallbackLocale: Locale(
+                          AppConstants.languages[0].languageCode!,
+                          AppConstants.languages[0].countryCode),
+                      initialRoute: GetPlatform.isWeb
+                          ? RouteHelper.getInitialRoute()
+                          : RouteHelper.getSplashRoute(
+                              widget.body, widget.linkBody),
+                      getPages: RouteHelper.routes,
+                      defaultTransition: Transition.topLevel,
+                      transitionDuration: const Duration(milliseconds: 500),
+                      builder: (BuildContext context, widget) {
+                        return MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                                textScaler: const TextScaler.linear(1)),
+                            child: Material(
+                                child: Stack(children: [
+                              widget!,
+                              GetBuilder<SplashController>(
+                                  builder: (splashController) {
+                                if (!splashController.savedCookiesData ||
+                                    !splashController.getAcceptCookiesStatus(
+                                        splashController
+                                                .configModel?.cookiesText ??
+                                            "")) {
+                                  return ResponsiveHelper.isWeb()
+                                      ? const Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: CookiesViewWidget())
+                                      : const SizedBox();
+                                } else {
+                                  return const SizedBox();
+                                }
+                              })
+                            ])));
+                      }),
+                );
         });
       });
     });

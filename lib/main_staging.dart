@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:upgrader/upgrader.dart';
 import 'package:zaika/app.dart';
 import 'package:zaika/features/notification/domain/models/notification_body_model.dart';
 import 'package:zaika/features/splash/domain/models/deep_link_body.dart';
@@ -24,10 +25,12 @@ Future<void> main() async {
   if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = MyHttpOverrides();
   }
+
   AppConfig.init(Environment.STAGING);
   // AppConstants.baseUrl = 'https://staging.zaika.ltd';
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+  await Upgrader.clearSavedSettings();
 
   // Staging Base URL
 

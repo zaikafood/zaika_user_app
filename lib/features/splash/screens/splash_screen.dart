@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:zaika/common/widgets/no_internet_screen_widget.dart';
 import 'package:zaika/features/auth/controllers/auth_controller.dart';
 import 'package:zaika/features/cart/controllers/cart_controller.dart';
@@ -17,7 +18,8 @@ import '../../../helper/route_helper.dart';
 class SplashScreen extends StatefulWidget {
   final NotificationBodyModel? notificationBody;
   final DeepLinkBody? linkBody;
-  const SplashScreen({super.key, required this.notificationBody, required this.linkBody});
+  const SplashScreen(
+      {super.key, required this.notificationBody, required this.linkBody});
 
   @override
   SplashScreenState createState() => SplashScreenState();
@@ -32,17 +34,21 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     bool firstTime = true;
-    _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      bool isConnected = result.contains(ConnectivityResult.wifi) || result.contains(ConnectivityResult.mobile);
+    _onConnectivityChanged = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      bool isConnected = result.contains(ConnectivityResult.wifi) ||
+          result.contains(ConnectivityResult.mobile);
 
-      if(!firstTime) {
+      if (!firstTime) {
         ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
         ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
           backgroundColor: isConnected ? Colors.green : Colors.red,
           duration: Duration(seconds: isConnected ? 3 : 6000),
-          content: Text(isConnected ? 'connected'.tr : 'no_connection'.tr, textAlign: TextAlign.center),
+          content: Text(isConnected ? 'connected'.tr : 'no_connection'.tr,
+              textAlign: TextAlign.center),
         ));
-        if(isConnected) {
+        if (isConnected) {
           _route();
         }
       }
@@ -50,15 +56,16 @@ class SplashScreenState extends State<SplashScreen> {
     });
 
     Get.find<SplashController>().initSharedData();
-    if(AddressHelper.getAddressFromSharedPref() != null && (AddressHelper.getAddressFromSharedPref()!.zoneIds == null
-        || AddressHelper.getAddressFromSharedPref()!.zoneData == null)) {
+    if (AddressHelper.getAddressFromSharedPref() != null &&
+        (AddressHelper.getAddressFromSharedPref()!.zoneIds == null ||
+            AddressHelper.getAddressFromSharedPref()!.zoneData == null)) {
       AddressHelper.clearAddressFromSharedPref();
     }
-    if(Get.find<AuthController>().isGuestLoggedIn() || Get.find<AuthController>().isLoggedIn()) {
+    if (Get.find<AuthController>().isGuestLoggedIn() ||
+        Get.find<AuthController>().isLoggedIn()) {
       Get.find<CartController>().getCartDataOnline();
     }
     _route();
-
   }
 
   @override
@@ -68,12 +75,10 @@ class SplashScreenState extends State<SplashScreen> {
     _onConnectivityChanged?.cancel();
   }
 
-
   void _route() {
     Get.find<SplashController>().getConfigData(
         handleMaintenanceMode: false,
-        notificationBody: widget.notificationBody
-    );
+        notificationBody: widget.notificationBody);
   }
 
   @override
@@ -82,15 +87,20 @@ class SplashScreenState extends State<SplashScreen> {
       key: _globalKey,
       body: GetBuilder<SplashController>(builder: (splashController) {
         return Center(
-          child: splashController.hasConnection ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(Images.logo, width: 100),
-              // const SizedBox(height: Dimensions.paddingSizeLarge),
-              //
-              // Image.asset(Images.logoName, width: 150),
-            ],
-          ) : NoInternetScreen(child: SplashScreen(notificationBody: widget.notificationBody, linkBody: widget.linkBody)),
+          child: splashController.hasConnection
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(Images.logo, width: 100),
+                    // const SizedBox(height: Dimensions.paddingSizeLarge),
+                    //
+                    // Image.asset(Images.logoName, width: 150),
+                  ],
+                )
+              : NoInternetScreen(
+                  child: SplashScreen(
+                      notificationBody: widget.notificationBody,
+                      linkBody: widget.linkBody)),
         );
       }),
     );

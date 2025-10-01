@@ -648,7 +648,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 isLatest: true)
                                             : const SizedBox(),
 
-                                        const PromotionalBannerViewWidget(),
+                                        // const PromotionalBannerViewWidget(),
                                       ]),
                                 )),
                               ),

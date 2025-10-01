@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:upgrader/upgrader.dart';
 import 'package:zaika/app.dart';
 import 'package:zaika/features/notification/domain/models/notification_body_model.dart';
 import 'package:zaika/features/splash/domain/models/deep_link_body.dart';
@@ -24,12 +25,14 @@ Future<void> main() async {
   if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = MyHttpOverrides();
   }
-  AppConfig.init(Environment.STAGING);
+
+  AppConfig.init(Environment.PRODUCTION);
   // AppConstants.baseUrl =
   //     'https://zaika.ltd'; // Yahan apna production URL daalein
 
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+  await Upgrader.clearSavedSettings();
 
   // Production Base URL
 
@@ -83,6 +86,7 @@ Future<void> main() async {
       version: "v13.0",
     );
   }
+
   runApp(MyApp(
       languages: languages, body: body, linkBody: linkBody, staging: false));
 }
