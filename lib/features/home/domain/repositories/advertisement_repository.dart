@@ -12,23 +12,30 @@ class AdvertisementRepository implements AdvertisementRepositoryInterface {
   AdvertisementRepository({required this.apiClient});
 
   @override
-  Future<List<AdvertisementModel>?> getList({int? offset, DataSourceEnum? source}) async {
+  Future<List<AdvertisementModel>?> getList(
+      {int? offset, DataSourceEnum? source}) async {
     List<AdvertisementModel>? advertisementList;
     String cacheId = AppConstants.advertisementListUri;
 
-    switch(source!){
+    switch (source!) {
       case DataSourceEnum.client:
-        Response response = await apiClient.getData(AppConstants.advertisementListUri);
-        if(response.statusCode == 200) {
+        Response response = await apiClient
+            .getData(AppConstants.advertisementListUri, headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'zoneId': ""
+        });
+        if (response.statusCode == 200) {
           advertisementList = [];
           response.body.forEach((data) {
             advertisementList?.add(AdvertisementModel.fromJson(data));
           });
-          LocalClient.organize(DataSourceEnum.client, cacheId, jsonEncode(response.body), apiClient.getHeader());
+          LocalClient.organize(DataSourceEnum.client, cacheId,
+              jsonEncode(response.body), apiClient.getHeader());
         }
       case DataSourceEnum.local:
-        String? cacheResponseData = await LocalClient.organize(DataSourceEnum.local, cacheId, null, null);
-        if(cacheResponseData != null) {
+        String? cacheResponseData = await LocalClient.organize(
+            DataSourceEnum.local, cacheId, null, null);
+        if (cacheResponseData != null) {
           advertisementList = [];
           jsonDecode(cacheResponseData).forEach((data) {
             advertisementList?.add(AdvertisementModel.fromJson(data));
@@ -58,5 +65,4 @@ class AdvertisementRepository implements AdvertisementRepositoryInterface {
   Future update(Map<String, dynamic> body, int? id) {
     throw UnimplementedError();
   }
-
 }

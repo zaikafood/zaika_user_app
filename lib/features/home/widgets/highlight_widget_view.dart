@@ -32,6 +32,10 @@ class HighlightWidgetView extends StatefulWidget {
 class _HighlightWidgetViewState extends State<HighlightWidgetView> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  initState() {
+    super.initState();
+    Get.find<AdvertisementController>().getAdvertisementList();
+  }
 
   @override
   Widget build(BuildContext context) {

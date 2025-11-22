@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zaika/common/enums/data_source_enum.dart';
 import 'package:zaika/features/home/domain/models/advertisement_model.dart';
@@ -25,18 +26,23 @@ class AdvertisementController extends GetxController implements GetxService {
 
   bool autoPlay = true;
 
-  Future<void> getAdvertisementList({DataSourceEnum dataSource = DataSourceEnum.local, bool fromRecall = false}) async {
-    if(!fromRecall) {
+  Future<void> getAdvertisementList(
+      {DataSourceEnum dataSource = DataSourceEnum.local,
+      bool fromRecall = false}) async {
+    if (!fromRecall) {
       _advertisementList = null;
     }
     List<AdvertisementModel>? advertisementList;
-    if(dataSource == DataSourceEnum.local) {
-      advertisementList = await advertisementServiceInterface.getAdvertisementList(source: DataSourceEnum.local);
+    if (dataSource == DataSourceEnum.local) {
+      advertisementList = await advertisementServiceInterface
+          .getAdvertisementList(source: DataSourceEnum.local);
       _prepareAdvertisement(advertisementList);
       getAdvertisementList(dataSource: DataSourceEnum.client, fromRecall: true);
     } else {
-      advertisementList = await advertisementServiceInterface.getAdvertisementList(source: DataSourceEnum.client);
+      advertisementList = await advertisementServiceInterface
+          .getAdvertisementList(source: DataSourceEnum.client);
       _prepareAdvertisement(advertisementList);
+      update();
     }
   }
 
@@ -44,22 +50,22 @@ class AdvertisementController extends GetxController implements GetxService {
     if (advertisementList != null) {
       _advertisementList = [];
       _advertisementList = advertisementList;
+      debugPrint('Advertisement List Length: ${_advertisementList!.length}');
     }
     update();
   }
 
   void setCurrentIndex(int index, bool notify) {
     _currentIndex = index;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
 
-  void updateAutoPlayStatus({bool shouldUpdate = false, bool status = false}){
+  void updateAutoPlayStatus({bool shouldUpdate = false, bool status = false}) {
     autoPlay = status;
-    if(shouldUpdate){
+    if (shouldUpdate) {
       update();
     }
   }
-
 }
