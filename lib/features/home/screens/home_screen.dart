@@ -108,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _isLogin = Get.find<AuthController>().isLoggedIn();
+    Get.find<LocationController>().getCurrentLocation(true);
     HomeScreen.loadData(false).then((value) {
       Get.find<SplashController>().getReferBottomSheetStatus();
 
@@ -197,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: RefreshIndicator(
                 onRefresh: () async {
                   // Get.find<HomeController>().getStock();
-
+                  await Get.find<LocationController>().getCurrentLocation(true);
                   await Get.find<HomeController>().getBannerList(true);
                   await Get.find<CategoryController>().getCategoryList(true);
                   await Get.find<CuisineController>().getCuisineList();
@@ -368,8 +369,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     Flexible(
                                                                       child:
                                                                           Text(
-                                                                        AddressHelper.getAddressFromSharedPref()!
-                                                                            .address!,
+                                                                        // AddressHelper.getAddressFromSharedPref()!
+                                                                        //     .address!,
+                                                                        locationController.address ??
+                                                                            "",
                                                                         style: robotoRegular
                                                                             .copyWith(
                                                                           color:

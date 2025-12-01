@@ -330,13 +330,15 @@ class _PaymentMethodBottomSheetState extends State<PaymentMethodBottomSheet> {
                                                   .paymentMethodIndex ==
                                               0,
                                           onTap: () {
-                                            if (widget.totalPrice < 150) {
-                                              checkoutController
-                                                  .setPaymentMethod(0);
-                                            } else {
-                                              showCustomSnackBar(
-                                                  'Cash on Delivery is available only for orders below ₹150.');
-                                            }
+                                            checkoutController
+                                                .setPaymentMethod(0);
+                                            // if (widget.totalPrice < 150) {
+                                            //   checkoutController
+                                            //       .setPaymentMethod(0);
+                                            // } else {
+                                            //   showCustomSnackBar(
+                                            //       'Cash on Delivery is available only for orders below ₹150.');
+                                            // }
                                           }),
                                     )
                                   : const SizedBox(),

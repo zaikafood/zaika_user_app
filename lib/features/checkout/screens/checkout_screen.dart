@@ -175,6 +175,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     setSinglePaymentActive();
 
     Future.delayed(const Duration(milliseconds: 500), () {
+      if (!mounted) return; // Check mounted
       if (!Get.find<SplashController>().configModel!.homeDelivery! &&
           Get.find<SplashController>().configModel!.takeAway!) {
         Get.find<CheckoutController>().setOrderType('take_away', notify: true);
@@ -192,7 +193,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     if (AuthHelper.isLoggedIn()) {
       String phone = await _splitPhoneNumber(
           Get.find<ProfileController>().userInfoModel?.userInfo?.phone ?? '');
-
+      if (!mounted) return;
       guestContactPersonNameController.text =
           '${Get.find<ProfileController>().userInfoModel?.userInfo?.fName ?? ''} ${Get.find<ProfileController>().userInfoModel?.userInfo?.lName ?? ''}';
       guestContactPersonNumberController.text = phone;
@@ -203,14 +204,17 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> _selectDineIn() async {
     Future.delayed(Duration(milliseconds: 800), () {
+      if (!mounted) return;
       Get.find<CheckoutController>().setOrderType('dine_in', notify: true);
       Future.delayed(Duration(milliseconds: 500), () {
+        if (!mounted) return;
         if (Get.find<CheckoutController>().restaurant != null &&
             Get.find<CheckoutController>().distance != null) {
           Get.find<CheckoutController>().setOrderType('dine_in', notify: true);
           _animateDeliverySection();
         } else {
           Future.delayed(Duration(seconds: 3), () {
+            if (!mounted) return;
             Get.find<CheckoutController>()
                 .setOrderType('dine_in', notify: true);
             _animateDeliverySection();
@@ -221,7 +225,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   _animateDeliverySection() {
-    if (deliveryOptionScrollController.hasClients) {
+    if (mounted && deliveryOptionScrollController.hasClients) {
       deliveryOptionScrollController.animateTo(
         deliveryOptionScrollController
             .position.maxScrollExtent, // Scroll to the end
@@ -795,7 +799,9 @@ class CheckoutScreenState extends State<CheckoutScreen> {
             })
           : NotLoggedInScreen(callBack: (value) {
               initCall();
-              setState(() {});
+              if (mounted) {
+                setState(() {});
+              }
             }),
     );
   }
@@ -805,20 +811,26 @@ class CheckoutScreenState extends State<CheckoutScreen> {
       required CheckoutController checkoutController,
       bool returnDeliveryCharge = true,
       bool returnMaxCodOrderAmount = false}) {
-    ZoneData zoneData = AddressHelper.getAddressFromSharedPref()!
-        .zoneData!
-        .firstWhere((data) => data.id == restaurant!.zoneId);
+    ZoneData? zoneData;
+    try {
+      zoneData = AddressHelper.getAddressFromSharedPref()!
+          .zoneData!
+          .firstWhere((data) => data.id == restaurant!.zoneId);
+    } catch (e) {
+      return -1;
+    }
+
     double perKmCharge = restaurant!.selfDeliverySystem == 1
         ? restaurant.perKmShippingCharge!
-        : zoneData.perKmShippingCharge ?? 0;
+        : zoneData!.perKmShippingCharge ?? 0;
 
     double minimumCharge = restaurant.selfDeliverySystem == 1
         ? restaurant.minimumShippingCharge!
-        : zoneData.minimumShippingCharge ?? 0;
+        : zoneData!.minimumShippingCharge ?? 0;
 
     double? maximumCharge = restaurant.selfDeliverySystem == 1
         ? restaurant.maximumShippingCharge
-        : zoneData.maximumShippingCharge;
+        : zoneData!.maximumShippingCharge;
 
     double deliveryCharge = checkoutController.distance! * perKmCharge;
     double charge = checkoutController.distance! * perKmCharge;
@@ -841,7 +853,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     }
 
     if (restaurant.selfDeliverySystem == 0 &&
-        zoneData.increasedDeliveryFeeStatus == 1) {
+        zoneData!.increasedDeliveryFeeStatus == 1) {
       badWeatherChargeForToolTip =
           (deliveryCharge * (zoneData.increasedDeliveryFee! / 100));
       deliveryCharge = deliveryCharge +
@@ -866,7 +878,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     }
 
     double? maxCodOrderAmount;
-    if (zoneData.maxCodOrderAmount != null) {
+    if (zoneData!.maxCodOrderAmount != null) {
       maxCodOrderAmount = zoneData.maxCodOrderAmount;
     }
 
@@ -880,6 +892,86 @@ class CheckoutScreenState extends State<CheckoutScreen> {
       }
     }
   }
+
+  // double? _getDeliveryCharge(
+  //     {required Restaurant? restaurant,
+  //     required CheckoutController checkoutController,
+  //     bool returnDeliveryCharge = true,
+  //     bool returnMaxCodOrderAmount = false}) {
+  //   ZoneData zoneData = AddressHelper.getAddressFromSharedPref()!
+  //       .zoneData!
+  //       .firstWhere((data) => data.id == restaurant!.zoneId);
+  //   double perKmCharge = restaurant!.selfDeliverySystem == 1
+  //       ? restaurant.perKmShippingCharge!
+  //       : zoneData.perKmShippingCharge ?? 0;
+
+  //   double minimumCharge = restaurant.selfDeliverySystem == 1
+  //       ? restaurant.minimumShippingCharge!
+  //       : zoneData.minimumShippingCharge ?? 0;
+
+  //   double? maximumCharge = restaurant.selfDeliverySystem == 1
+  //       ? restaurant.maximumShippingCharge
+  //       : zoneData.maximumShippingCharge;
+
+  //   double deliveryCharge = checkoutController.distance! * perKmCharge;
+  //   double charge = checkoutController.distance! * perKmCharge;
+
+  //   if (deliveryCharge < minimumCharge) {
+  //     deliveryCharge = minimumCharge;
+  //     charge = minimumCharge;
+  //   }
+
+  //   if (restaurant.selfDeliverySystem == 0 &&
+  //       checkoutController.extraCharge != null) {
+  //     extraChargeForToolTip = checkoutController.extraCharge!;
+  //     deliveryCharge = deliveryCharge + checkoutController.extraCharge!;
+  //     charge = charge + checkoutController.extraCharge!;
+  //   }
+
+  //   if (maximumCharge != null && deliveryCharge > maximumCharge) {
+  //     deliveryCharge = maximumCharge;
+  //     charge = maximumCharge;
+  //   }
+
+  //   if (restaurant.selfDeliverySystem == 0 &&
+  //       zoneData.increasedDeliveryFeeStatus == 1) {
+  //     badWeatherChargeForToolTip =
+  //         (deliveryCharge * (zoneData.increasedDeliveryFee! / 100));
+  //     deliveryCharge = deliveryCharge +
+  //         (deliveryCharge * (zoneData.increasedDeliveryFee! / 100));
+  //     charge = charge + charge * (zoneData.increasedDeliveryFee! / 100);
+  //   }
+
+  //   if (restaurant.selfDeliverySystem == 0 &&
+  //       Get.find<SplashController>().configModel!.freeDeliveryDistance !=
+  //           null &&
+  //       Get.find<SplashController>().configModel!.freeDeliveryDistance! >=
+  //           checkoutController.distance!) {
+  //     deliveryCharge = 0;
+  //     charge = 0;
+  //   }
+
+  //   if (restaurant.selfDeliverySystem == 1 &&
+  //       restaurant.freeDeliveryDistanceStatus! &&
+  //       restaurant.freeDeliveryDistanceValue! >= checkoutController.distance!) {
+  //     deliveryCharge = 0;
+  //     charge = 0;
+  //   }
+
+  //   double? maxCodOrderAmount;
+  //   if (zoneData.maxCodOrderAmount != null) {
+  //     maxCodOrderAmount = zoneData.maxCodOrderAmount;
+  //   }
+  //   if (returnMaxCodOrderAmount) {
+  //     return maxCodOrderAmount;
+  //   } else {
+  //     if (returnDeliveryCharge) {
+  //       return deliveryCharge
+  //     } else {
+  //       return charge;
+  //     }
+  //   }
+  // }
 
   double _calculatePrice(List<CartModel>? cartList) {
     double price = 0;
